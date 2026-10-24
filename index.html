@@ -711,6 +711,12 @@ footer{padding:40px 0 calc(50px + env(safe-area-inset-bottom,0px)); color:var(--
 <script src="site-content.js"></script>
 <script type="application/json" id="sampleReviewsData" data-json="reviews.samples">[{"name": "Rupa D.", "role": "Class 12 student", "rating": 5, "message": "History was my weakest subject. Sir taught the freedom struggle like a story, and I scored 89 in my board exam."}, {"name": "Bijoy S.", "role": "Parent", "rating": 5, "message": "My son found Political Science boring. Now he follows the news and explains it to us at dinner."}, {"name": "Priya S.", "role": "College student", "rating": 5, "message": "His Political Science lectures are the clearest I’ve had at college. He makes political theory feel practical."}, {"name": "Headmaster", "role": "Government school", "rating": 5, "message": "He is patient, prepared and generous with his time. Students trust him, and it shows in their results."}]</script>
 <script>
+/* Always open at the top (home) when the page is opened or refreshed */
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+window.scrollTo(0, 0);
+addEventListener("pageshow", () => window.scrollTo(0, 0));
+
 /* Supabase keys live in config.js. All text, numbers and photos are edited from admin.html. */
 const CFG = window.SITE_CONFIG || {};
 const SUPABASE_URL = CFG.SUPABASE_URL || "", SUPABASE_ANON_KEY = CFG.SUPABASE_ANON_KEY || "", REVIEWS_NEED_APPROVAL = !!CFG.REVIEWS_NEED_APPROVAL;
@@ -924,9 +930,11 @@ if (SB) SB.from("site_content").select("data").eq("id", "main").maybeSingle().th
 /* ---------- Motion ---------- */
 if (window.gsap && window.ScrollTrigger && !reduce) {
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.clearScrollMemory("manual");
   let lenis = null;
   if (window.Lenis) {
     lenis = new Lenis({ lerp: 0.09 });
+    lenis.scrollTo(0, { immediate: true });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add(t => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
@@ -1030,7 +1038,7 @@ if (window.gsap && window.ScrollTrigger && !reduce) {
       b.addEventListener("mouseleave", () => { mx(0); my(0); });
     });
   }
-  addEventListener("load", () => ScrollTrigger.refresh());
+  addEventListener("load", () => { window.scrollTo(0, 0); if (lenis) lenis.scrollTo(0, { immediate: true }); ScrollTrigger.refresh(); });
 }
 </script>
 </body>
