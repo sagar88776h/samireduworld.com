@@ -236,16 +236,33 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
 /* Logo: images/logo.png replaces the "S" when it exists */
 .logo b, .wipe .mk{position:relative; overflow:hidden}
 .logo-img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#fff; border-radius:inherit; padding:2px}
+
+/* Brand logo */
+.auth-brand{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.auth-brand img{height:54px; width:auto; max-width:78%; filter:drop-shadow(0 8px 16px rgba(0,0,0,.12))}
+.admin-tag{font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.45em .9em; border-radius:999px; background:var(--ink); color:#fff; flex:none}
+.top-logo{gap:10px}
+.top-logo .top-full{height:44px; width:auto; filter:drop-shadow(0 6px 14px rgba(0,0,0,.1))}
+.top-logo b{display:none}
+@media (max-width: 900px){ .top-logo .top-full{display:none} .top-logo b{display:grid} }
+.wlogo{position:relative; width:min(560px, 82vw); border-radius:999px; overflow:hidden; box-shadow:0 30px 80px -30px rgba(30,107,242,.6)}
+.wlogo img{display:block; width:100%; height:auto}
+.wlogo::after{content:""; position:absolute; inset:0; background:linear-gradient(105deg, transparent 35%, rgba(255,255,255,.75) 50%, transparent 65%); transform:translateX(-120%)}
+.wipe.on .wlogo{animation:logoIn 1s cubic-bezier(.2,.7,.2,1) both}
+.wipe.on .wlogo::after{animation:shine 1.2s .55s ease-in-out both}
+@keyframes logoIn{from{opacity:0; transform:translateY(24px) scale(.88); filter:blur(8px)}}
+@keyframes shine{to{transform:translateX(120%)}}
+.wipe h2{font-size:clamp(2rem, 5.5vw, 3.6rem)}
 </style>
 </head>
 <body>
 <div class="bg" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
-<div class="wipe" id="wipe" aria-hidden="true"><span class="mk"><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</span><h2 id="wipeTitle">Welcome <em class="script">back</em></h2><p>Opening your dashboard</p><div class="wbar"><i></i></div></div>
+<div class="wipe" id="wipe" aria-hidden="true"><div class="wlogo"><img src="images/logo-header.webp" alt="" width="1100" height="259"></div><h2 id="wipeTitle">Welcome <em class="script">back</em></h2><p>Opening your dashboard</p><div class="wbar"><i></i></div></div>
 
 <!-- Not connected -->
 <div class="center" id="screenSetup" hidden>
   <div class="card auth stg">
-    <div class="logo"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span>Samir Edu World</span></div>
+    <div class="auth-brand"><img src="images/logo-header.webp" alt="Samir Edu World" width="1100" height="259"><span class="admin-tag">Admin</span></div>
     <h1>Connect the database</h1>
     <p class="sub">The admin page needs Supabase. Put your Project URL and Publishable key in <strong>config.js</strong>, run <strong>supabase-setup.sql</strong>, then reload this page.</p>
     <p class="err" id="setupWhy"></p>
@@ -255,7 +272,7 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
 <!-- Login -->
 <div class="center" id="screenLogin" hidden>
   <form class="card auth stg" id="loginForm" novalidate>
-    <div class="logo"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span>Samir Edu World<small>Admin</small></span></div>
+    <div class="auth-brand"><img src="images/logo-header.webp" alt="Samir Edu World" width="1100" height="259"><span class="admin-tag">Admin</span></div>
     <h1>Welcome <em class="script">back</em></h1>
     <p class="sub">Edit your website. Changes go live the moment you save.</p>
     <label>Email<input type="email" name="email" autocomplete="username" inputmode="email"></label>
@@ -270,7 +287,7 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
 <!-- Set a new password (after the reset email) -->
 <div class="center" id="screenReset" hidden>
   <form class="card auth stg" id="resetForm" novalidate>
-    <div class="logo"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span>Samir Edu World<small>Admin</small></span></div>
+    <div class="auth-brand"><img src="images/logo-header.webp" alt="Samir Edu World" width="1100" height="259"><span class="admin-tag">Admin</span></div>
     <h1>Choose a new password</h1>
     <label>New password<input type="password" name="p1" autocomplete="new-password" minlength="8"></label>
     <label>Type it again<input type="password" name="p2" autocomplete="new-password" minlength="8"></label>
@@ -283,7 +300,7 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
 <div id="screenApp" hidden>
   <header class="top">
     <div class="top-in">
-      <div class="logo"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span>Samir Edu World<small>Admin</small></span></div>
+      <div class="logo top-logo"><img class="top-full" src="images/logo-header.webp" alt="Samir Edu World" width="1100" height="259"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span class="admin-tag">Admin</span></div>
       <a class="btn light sm" href="./" target="_blank" rel="noopener"><span class="vs-label">View&nbsp;</span>website</a>
       <button class="btn light sm" id="logoutBtn" type="button">Log out</button>
     </div>

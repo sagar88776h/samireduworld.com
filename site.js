@@ -15,7 +15,7 @@
   /* ---------- Loading screen and page transitions ---------- */
   const loader = $("loader"), ldTitle = $("ldTitle"), ldBar = $("ldBar");
   const TITLES = {
-    index: 'Samir <em class="script">Edu World</em>',
+    index: 'Political <em class="script">Science</em>',
     about: 'About <em class="script">me</em>',
     subjects: 'What I <em class="script">teach</em>',
     notes: 'Study <em class="script">notes</em>',
@@ -42,6 +42,7 @@
   function go(href, key){
     if (!loader || reduce) { location.href = href; return; }
     ldTitle.innerHTML = wrapTitle(TITLES[key] || TITLES.index);
+    const lg = $("ldLogo"); if (lg) lg.replaceWith(lg.cloneNode(true));
     ldBar.innerHTML = "<i></i>";
     loader.classList.remove("gone", "out");
     loader.classList.add("enter");

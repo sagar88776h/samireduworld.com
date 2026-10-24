@@ -426,3 +426,23 @@ footer{padding:40px 0 calc(50px + env(safe-area-inset-bottom,0px)); color:var(--
 .brand em{font-style:normal; color:var(--blue)}
 .ld-sub i{display:inline-block; width:6px; height:6px; border-radius:50%; background:#1E6BF2; vertical-align:middle; margin:0 12px}
 .brand b .logo-img, .ld-mark .logo-img{padding:0; background:transparent}
+
+/* ---------- Brand logo (images/logo-header.webp) ---------- */
+.brand .brand-full{display:block; height:50px; width:auto; filter:drop-shadow(0 8px 18px rgba(0,0,0,.14))}
+.brand:not(.no-full){background:none; box-shadow:none; padding:0}
+.brand:not(.no-full) > b, .brand:not(.no-full) > span{display:none}
+.brand.no-full .brand-full{display:none}
+@media (max-width: 760px){
+  .brand:not(.no-full) .brand-full{display:none}
+  .brand:not(.no-full){background:var(--surface); padding:8px; box-shadow:0 6px 20px -12px rgba(0,0,0,.35)}
+  .brand:not(.no-full) > b{display:grid}
+}
+.ld-logo{position:relative; width:min(560px, 82vw); border-radius:999px; overflow:hidden; box-shadow:0 30px 80px -30px rgba(30,107,242,.6); animation:ldLogo 1s cubic-bezier(.2,.7,.2,1) both}
+.ld-logo img{display:block; width:100%; height:auto}
+.ld-logo::after{content:""; position:absolute; inset:0; background:linear-gradient(105deg, transparent 35%, rgba(255,255,255,.75) 50%, transparent 65%); transform:translateX(-120%); animation:ldShine 1.2s .55s ease-in-out both}
+@keyframes ldLogo{from{opacity:0; transform:translateY(24px) scale(.88); filter:blur(8px)}}
+@keyframes ldShine{to{transform:translateX(120%)}}
+.loader:not(.no-logo) .ld-mark, .loader:not(.no-logo) .ld-sub{display:none}
+.loader.no-logo .ld-logo{display:none}
+.loader:not(.no-logo) .ld-title{font-size:clamp(2rem, 5.5vw, 3.6rem); margin-top:6px}
+.foot-logo img{display:block; height:46px; width:auto; filter:drop-shadow(0 6px 14px rgba(0,0,0,.1))}
