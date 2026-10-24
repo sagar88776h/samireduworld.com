@@ -1,6 +1,6 @@
 # Samir Edu World
 
-Portfolio website for Samir Debnath — tuition teacher for college students in Political Science and Education. https://samireduworld.com
+Portfolio website for Samir Debnath — Political Science tuition teacher for college students (also teaches Education). https://samireduworld.com
 
 Static site, no build step. Animations: GSAP, ScrollTrigger, Lenis. Database, login and photo storage: Supabase.
 

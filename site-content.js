@@ -18,7 +18,7 @@
     ]},
     { id: "hero", title: "Top of the page", fields: [
       { key: "hero.badge", label: "Small badge above the headline", type: "text" },
-      { key: "hero.word1", label: "First blue word", type: "text", help: "The headline reads: Teaching [first] and [second] since [year]." },
+      { key: "hero.word1", label: "First blue word", type: "text", help: "The headline reads: Political [first] made [second] since [year]." },
       { key: "hero.word2", label: "Second blue word", type: "text" },
       { key: "hero.year", label: "Teaching since (year)", type: "text" },
       { key: "hero.lede", label: "Intro paragraph", type: "textarea" },
@@ -88,7 +88,7 @@
       { key: "subjects.tuition.text", label: "Description", type: "textarea" },
       { key: "subjects.tuition.tags", label: "Tags", type: "list" }
     ]},
-    { id: "notes", title: "Free notes", note: "Each note keeps its drawing. You can change all of its text.", fields: [
+    { id: "notes", title: "Notes", note: "Each note keeps its drawing. You can change all of its text.", fields: [
       { key: "notes.intro", label: "Intro text", type: "textarea" },
       { key: "notes.items", label: "Note", type: "items", fixed: 6, fields: [
         { key: "subject", label: "Subject", type: "text" },

@@ -18,7 +18,7 @@
     index: 'Samir <em class="script">Edu World</em>',
     about: 'About <em class="script">me</em>',
     subjects: 'What I <em class="script">teach</em>',
-    notes: 'Free <em class="script">notes</em>',
+    notes: 'Study <em class="script">notes</em>',
     reviews: 'Kind <em class="script">words</em>',
     contact: 'Let’s <em class="script">talk</em>'
   };

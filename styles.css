@@ -404,3 +404,18 @@ footer{padding:40px 0 calc(50px + env(safe-area-inset-bottom,0px)); color:var(--
 .foot-nav{display:flex; flex-wrap:wrap; gap:6px 18px}
 .foot-nav a{text-decoration:none; color:var(--muted); font-weight:600}
 .foot-nav a:hover{color:var(--ink)}
+
+/* ---------- Political Science highlighted ---------- */
+.where.feature{grid-template-columns:1.45fr 1fr}
+@media (max-width: 860px){ .where.feature{grid-template-columns:1fr} }
+.card{position:relative}
+.card.feature{background:var(--blue); color:#fff; box-shadow:0 30px 60px -30px color-mix(in srgb, var(--blue) 70%, transparent)}
+.card.feature h3{color:#fff; font-size:clamp(1.8rem, 3vw, 2.3rem)}
+.card.feature p{color:rgba(255,255,255,.85)}
+.card.feature .ico{background:rgba(255,255,255,.18); color:#fff}
+.card.feature .topics li{border-bottom-color:rgba(255,255,255,.22); color:#fff}
+.card.feature .chip{background:rgba(255,255,255,.18); color:#fff}
+.feat-tag{position:absolute; top:28px; right:28px; font-weight:700; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; padding:.5em 1em; border-radius:999px; background:#fff; color:var(--blue)}
+:root[data-theme="dark"] .card.feature, :root[data-theme="dark"] .card.feature h3, :root[data-theme="dark"] .card.feature .topics li, :root[data-theme="dark"] .card.feature .chip{color:#0D0D0F}
+:root[data-theme="dark"] .card.feature p{color:rgba(13,13,15,.8)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .card.feature, :root:not([data-theme="light"]) .card.feature h3, :root:not([data-theme="light"]) .card.feature .topics li, :root:not([data-theme="light"]) .card.feature .chip{color:#0D0D0F} :root:not([data-theme="light"]) .card.feature p{color:rgba(13,13,15,.8)} }
