@@ -504,7 +504,7 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
         merge(defaults, S.read(new DOMParser().parseFromString(html, "text/html")));
       } catch (x) {}
     }
-    const { data } = await sb.from("site_content").select("data, updated_at").eq("id", "main").maybeSingle();
+    const { data } = await sb.from("site_content").select("data, updated_at").eq("id", "site").maybeSingle();
     saved = (data && data.data) || {};
     lastSaved = data && data.updated_at;
     current = merge(clone(defaults), saved);
@@ -669,10 +669,10 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
     const c = collect();
     if (!validate(c)) return;
     const b = $("saveBtn"); b.disabled = true; b.innerHTML = '<span class="spin"></span>Saving…';
-    const { error } = await sb.from("site_content").upsert({ id: "main", data: c, updated_at: new Date().toISOString() });
+    const { error } = await sb.from("site_content").upsert({ id: "site", data: c, updated_at: new Date().toISOString() });
     if (error) { b.disabled = false; b.textContent = "Save changes"; toast("Couldn’t save. Check your internet and try again.", true); return; }
     saved = c; current = merge(clone(defaults), saved);
-    try { localStorage.setItem("sew-content", JSON.stringify(c)); } catch (x) {}
+    try { localStorage.setItem("sew-content-v2", JSON.stringify(c)); } catch (x) {}
     setDirty(false);
     b.innerHTML = '<span class="ok">✓</span>Saved';
     const bar = $("saveBar"); bar.classList.add("saved"); setTimeout(() => bar.classList.remove("saved"), 800);

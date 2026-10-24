@@ -1,6 +1,6 @@
 # Samir Edu World
 
-Portfolio website for Samir Debnath — History, Political Science, Geography and Economics teacher (classes 9–12) and college Political Science teacher. https://samireduworld.com
+Portfolio website for Samir Debnath — college teacher of Political Science and Education, and tuition teacher for college students. https://samireduworld.com
 
 Static site, no build step. Animations: GSAP, ScrollTrigger, Lenis. Database, login and photo storage: Supabase.
 

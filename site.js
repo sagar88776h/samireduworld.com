@@ -278,11 +278,11 @@
     refreshScroll();
   });
   if (window.SiteContent) {
-    try { const cached = JSON.parse(localStorage.getItem("sew-content") || "null"); if (cached) SiteContent.apply(document, cached); } catch (x) {}
-    if (SB) SB.from("site_content").select("data").eq("id", "main").maybeSingle().then(({ data }) => {
+    try { const cached = JSON.parse(localStorage.getItem("sew-content-v2") || "null"); if (cached) SiteContent.apply(document, cached); } catch (x) {}
+    if (SB) SB.from("site_content").select("data").eq("id", "site").maybeSingle().then(({ data }) => {
       if (!data || !data.data) return;
       SiteContent.apply(document, data.data);
-      try { localStorage.setItem("sew-content", JSON.stringify(data.data)); } catch (x) {}
+      try { localStorage.setItem("sew-content-v2", JSON.stringify(data.data)); } catch (x) {}
     });
   }
 

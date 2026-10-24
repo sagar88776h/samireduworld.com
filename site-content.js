@@ -22,11 +22,11 @@
       { key: "hero.word2", label: "Second blue word", type: "text" },
       { key: "hero.year", label: "Teaching since (year)", type: "text" },
       { key: "hero.lede", label: "Intro paragraph", type: "textarea" },
-      { type: "heading", label: "School and college cards" },
-      { key: "roles.school.label", label: "School card, small text", type: "text" },
-      { key: "roles.school.value", label: "School card, big text", type: "text" },
-      { key: "roles.college.label", label: "College card, small text", type: "text" },
-      { key: "roles.college.value", label: "College card, big text", type: "text" }
+      { type: "heading", label: "The two small cards" },
+      { key: "roles.college.label", label: "First card, small text", type: "text" },
+      { key: "roles.college.value", label: "First card, big text", type: "text" },
+      { key: "roles.tuition.label", label: "Second card, small text", type: "text" },
+      { key: "roles.tuition.value", label: "Second card, big text", type: "text" }
     ]},
     { id: "photos", title: "Photos", fields: [
       { key: "photos.hero", label: "Main photo (top of the page)", type: "image", aspect: 960 / 1300 },
@@ -39,15 +39,15 @@
         { key: "label", label: "Label", type: "text" }
       ]}
     ]},
-    { id: "where", title: "School and college", fields: [
-      { type: "heading", label: "School card" },
-      { key: "where.school.title", label: "Title", type: "text" },
-      { key: "where.school.text", label: "Description", type: "textarea" },
-      { key: "where.school.tags", label: "Subjects", type: "list" },
+    { id: "where", title: "College and tuition", fields: [
       { type: "heading", label: "College card" },
       { key: "where.college.title", label: "Title", type: "text" },
       { key: "where.college.text", label: "Description", type: "textarea" },
-      { key: "where.college.tags", label: "Topics", type: "list" }
+      { key: "where.college.tags", label: "Topics", type: "list" },
+      { type: "heading", label: "Tuition card" },
+      { key: "where.tuition.title", label: "Title", type: "text" },
+      { key: "where.tuition.text", label: "Description", type: "textarea" },
+      { key: "where.tuition.tags", label: "Tags", type: "list" }
     ]},
     { id: "about", title: "About me", fields: [
       { key: "about.p1", label: "First paragraph", type: "textarea" },
@@ -58,35 +58,35 @@
       ]}
     ]},
     { id: "subjects", title: "Subjects", fields: [
-      { type: "heading", label: "History card" },
-      { key: "subjects.history.title", label: "Title", type: "text" },
-      { key: "subjects.history.text", label: "Description", type: "textarea" },
-      { key: "subjects.history.topics", label: "Topics", type: "list" },
-      { key: "subjects.history.tags", label: "Classes", type: "list" },
       { type: "heading", label: "Political Science card" },
       { key: "subjects.pol.title", label: "Title", type: "text" },
       { key: "subjects.pol.text", label: "Description", type: "textarea" },
       { key: "subjects.pol.topics", label: "Topics", type: "list" },
-      { key: "subjects.pol.tags", label: "Classes", type: "list" },
-      { type: "heading", label: "Economics card" },
-      { key: "subjects.econ.title", label: "Title", type: "text" },
-      { key: "subjects.econ.text", label: "Description", type: "textarea" },
-      { type: "heading", label: "Geography card" },
-      { key: "subjects.geo.title", label: "Title", type: "text" },
-      { key: "subjects.geo.text", label: "Description", type: "textarea" },
-      { type: "heading", label: "Board exam card" },
-      { key: "subjects.board.title", label: "Title", type: "text" },
-      { key: "subjects.board.text", label: "Description", type: "textarea" },
+      { key: "subjects.pol.tags", label: "Tags", type: "list" },
+      { type: "heading", label: "Education card" },
+      { key: "subjects.edu.title", label: "Title", type: "text" },
+      { key: "subjects.edu.text", label: "Description", type: "textarea" },
+      { key: "subjects.edu.topics", label: "Topics", type: "list" },
+      { key: "subjects.edu.tags", label: "Tags", type: "list" },
+      { type: "heading", label: "Answer writing card" },
+      { key: "subjects.answer.title", label: "Title", type: "text" },
+      { key: "subjects.answer.text", label: "Description", type: "textarea" },
+      { type: "heading", label: "Assignments card" },
+      { key: "subjects.projects.title", label: "Title", type: "text" },
+      { key: "subjects.projects.text", label: "Description", type: "textarea" },
+      { type: "heading", label: "Exam preparation card (blue)" },
+      { key: "subjects.exams.title", label: "Title", type: "text" },
+      { key: "subjects.exams.text", label: "Description", type: "textarea" },
       { type: "heading", label: "How a class works" },
       { key: "subjects.how.title", label: "Title", type: "text" },
       { key: "subjects.how.steps", label: "Step", type: "items", fixed: 3, fields: [
         { key: "title", label: "Step name", type: "text" },
         { key: "text", label: "Description", type: "text" }
       ]},
-      { type: "heading", label: "Saturday class card" },
-      { key: "subjects.saturday.title", label: "Title", type: "text" },
-      { key: "subjects.saturday.text", label: "Description", type: "textarea" },
-      { key: "subjects.saturday.tags", label: "Tags", type: "list" }
+      { type: "heading", label: "Tuition card" },
+      { key: "subjects.tuition.title", label: "Title", type: "text" },
+      { key: "subjects.tuition.text", label: "Description", type: "textarea" },
+      { key: "subjects.tuition.tags", label: "Tags", type: "list" }
     ]},
     { id: "notes", title: "Free notes", note: "Each note keeps its drawing. You can change all of its text.", fields: [
       { key: "notes.intro", label: "Intro text", type: "textarea" },

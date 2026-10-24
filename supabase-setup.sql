@@ -79,7 +79,7 @@ grant execute on function public.is_admin_email(text) to anon, authenticated;
 
 -- 6. Website content (one row, edited from admin.html)
 create table if not exists public.site_content (
-  id          text primary key default 'main',
+  id          text primary key default 'site',
   data        jsonb not null default '{}'::jsonb,
   updated_at  timestamptz not null default now()
 );
