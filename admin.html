@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Admin — Samir Edu World</title>
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -232,16 +232,20 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
 .rv{transition:background .3s, border-color .3s}
 .sec h2{display:flex; align-items:center; gap:12px}
 @media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation:none !important; transition:none !important} .rv-on{opacity:1; transform:none} .wipe{display:none !important} }
+
+/* Logo: images/logo.png replaces the "S" when it exists */
+.logo b, .wipe .mk{position:relative; overflow:hidden}
+.logo-img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#fff; border-radius:inherit; padding:2px}
 </style>
 </head>
 <body>
 <div class="bg" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
-<div class="wipe" id="wipe" aria-hidden="true"><span class="mk">S</span><h2 id="wipeTitle">Welcome <em class="script">back</em></h2><p>Opening your dashboard</p><div class="wbar"><i></i></div></div>
+<div class="wipe" id="wipe" aria-hidden="true"><span class="mk"><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</span><h2 id="wipeTitle">Welcome <em class="script">back</em></h2><p>Opening your dashboard</p><div class="wbar"><i></i></div></div>
 
 <!-- Not connected -->
 <div class="center" id="screenSetup" hidden>
   <div class="card auth stg">
-    <div class="logo"><b>S</b><span>Samir Edu World</span></div>
+    <div class="logo"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span>Samir Edu World</span></div>
     <h1>Connect the database</h1>
     <p class="sub">The admin page needs Supabase. Put your Project URL and Publishable key in <strong>config.js</strong>, run <strong>supabase-setup.sql</strong>, then reload this page.</p>
     <p class="err" id="setupWhy"></p>
@@ -251,7 +255,7 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
 <!-- Login -->
 <div class="center" id="screenLogin" hidden>
   <form class="card auth stg" id="loginForm" novalidate>
-    <div class="logo"><b>S</b><span>Samir Edu World<small>Admin</small></span></div>
+    <div class="logo"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span>Samir Edu World<small>Admin</small></span></div>
     <h1>Welcome <em class="script">back</em></h1>
     <p class="sub">Edit your website. Changes go live the moment you save.</p>
     <label>Email<input type="email" name="email" autocomplete="username" inputmode="email"></label>
@@ -266,7 +270,7 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
 <!-- Set a new password (after the reset email) -->
 <div class="center" id="screenReset" hidden>
   <form class="card auth stg" id="resetForm" novalidate>
-    <div class="logo"><b>S</b><span>Samir Edu World<small>Admin</small></span></div>
+    <div class="logo"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span>Samir Edu World<small>Admin</small></span></div>
     <h1>Choose a new password</h1>
     <label>New password<input type="password" name="p1" autocomplete="new-password" minlength="8"></label>
     <label>Type it again<input type="password" name="p2" autocomplete="new-password" minlength="8"></label>
@@ -279,7 +283,7 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
 <div id="screenApp" hidden>
   <header class="top">
     <div class="top-in">
-      <div class="logo"><b>S</b><span>Samir Edu World<small>Admin</small></span></div>
+      <div class="logo"><b><img class="logo-img" src="images/logo.png" alt="" onerror="this.remove()">S</b><span>Samir Edu World<small>Admin</small></span></div>
       <a class="btn light sm" href="./" target="_blank" rel="noopener"><span class="vs-label">View&nbsp;</span>website</a>
       <button class="btn light sm" id="logoutBtn" type="button">Log out</button>
     </div>

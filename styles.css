@@ -419,3 +419,10 @@ footer{padding:40px 0 calc(50px + env(safe-area-inset-bottom,0px)); color:var(--
 :root[data-theme="dark"] .card.feature, :root[data-theme="dark"] .card.feature h3, :root[data-theme="dark"] .card.feature .topics li, :root[data-theme="dark"] .card.feature .chip{color:#0D0D0F}
 :root[data-theme="dark"] .card.feature p{color:rgba(13,13,15,.8)}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .card.feature, :root:not([data-theme="light"]) .card.feature h3, :root:not([data-theme="light"]) .card.feature .topics li, :root:not([data-theme="light"]) .card.feature .chip{color:#0D0D0F} :root:not([data-theme="light"]) .card.feature p{color:rgba(13,13,15,.8)} }
+
+/* ---------- Logo: images/logo.png replaces the "S" when it exists ---------- */
+.brand b, .ld-mark{position:relative; overflow:hidden}
+.logo-img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#fff; border-radius:inherit; padding:2px}
+.brand em{font-style:normal; color:var(--blue)}
+.ld-sub i{display:inline-block; width:6px; height:6px; border-radius:50%; background:#1E6BF2; vertical-align:middle; margin:0 12px}
+.brand b .logo-img, .ld-mark .logo-img{padding:0; background:transparent}
