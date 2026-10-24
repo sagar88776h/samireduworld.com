@@ -39,15 +39,15 @@
         { key: "label", label: "Label", type: "text" }
       ]}
     ]},
-    { id: "where", title: "College and tuition", fields: [
-      { type: "heading", label: "College card" },
-      { key: "where.college.title", label: "Title", type: "text" },
-      { key: "where.college.text", label: "Description", type: "textarea" },
-      { key: "where.college.tags", label: "Topics", type: "list" },
-      { type: "heading", label: "Tuition card" },
-      { key: "where.tuition.title", label: "Title", type: "text" },
-      { key: "where.tuition.text", label: "Description", type: "textarea" },
-      { key: "where.tuition.tags", label: "Tags", type: "list" }
+    { id: "where", title: "Who I teach", fields: [
+      { type: "heading", label: "Political Science card" },
+      { key: "where.pol.title", label: "Title", type: "text" },
+      { key: "where.pol.text", label: "Description", type: "textarea" },
+      { key: "where.pol.tags", label: "Topics", type: "list" },
+      { type: "heading", label: "Education card" },
+      { key: "where.edu.title", label: "Title", type: "text" },
+      { key: "where.edu.text", label: "Description", type: "textarea" },
+      { key: "where.edu.tags", label: "Topics", type: "list" }
     ]},
     { id: "about", title: "About me", fields: [
       { key: "about.p1", label: "First paragraph", type: "textarea" },
