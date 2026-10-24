@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — Samir Edu World</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F4F4; --surface:#FFFFFF; --surface-2:#EDEDEF; --ink:#000; --text:#111114; --muted:#5F5F69; --line:#E3E3E7;
+  --blue:#1E6BF2; --blue-soft:#E7EFFE; --red:#D93025; --green:#188038;
+  --sans:"Urbanist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none !important}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 90px)}
+body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); font-size:17px; line-height:1.5; -webkit-font-smoothing:antialiased}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); background:var(--bg); z-index:60}
+h1,h2,h3{margin:0; color:var(--ink); letter-spacing:-.03em; line-height:1.1}
+p{margin:0}
+:focus-visible{outline:3px solid var(--blue); outline-offset:2px; border-radius:8px}
+button{font:inherit}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; border:0; border-radius:999px; padding:.85em 1.5em; font-weight:700; font-size:.95rem; cursor:pointer; text-decoration:none; background:var(--ink); color:#fff; white-space:nowrap}
+.btn.blue{background:var(--blue)}
+.btn.light{background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.danger{background:transparent; color:var(--red); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--red) 35%, transparent)}
+.btn.sm{padding:.6em 1.1em; font-size:.88rem}
+.btn:disabled{opacity:.55; cursor:progress}
+.link{background:none; border:0; color:var(--blue); font-weight:600; cursor:pointer; padding:6px 0; text-decoration:underline; text-underline-offset:3px}
+.card{background:var(--surface); border-radius:28px; padding:clamp(20px, 3vw, 32px)}
+.logo{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:-.02em}
+.logo b{width:36px; height:36px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center}
+.logo small{display:block; font-weight:500; color:var(--muted); font-size:.8rem; letter-spacing:0}
+.err{color:var(--red); font-weight:600; font-size:.92rem; min-height:1.2em}
+.msg{color:var(--green); font-weight:600; font-size:.92rem}
+
+/* Auth screens */
+.center{min-height:100dvh; display:grid; place-items:center; padding:20px}
+.auth{width:min(420px, 100%); display:grid; gap:16px}
+.auth h1{font-size:2rem; margin-top:10px}
+.auth .sub{color:var(--muted)}
+label.fld, .auth label{display:grid; gap:6px; font-weight:600; font-size:.93rem; color:var(--ink)}
+input, textarea, select{font:inherit; font-size:1rem; font-weight:500; color:var(--ink); background:var(--bg); border:1.5px solid transparent; border-radius:14px; padding:.8em .95em; width:100%}
+input:focus, textarea:focus, select:focus{outline:none; border-color:var(--blue); background:var(--surface)}
+textarea{min-height:96px; resize:vertical; line-height:1.5}
+
+/* App */
+.top{position:sticky; top:env(safe-area-inset-top,0px); z-index:40; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--line)}
+.top-in{width:min(1180px, 100% - 32px); margin:auto; display:flex; align-items:center; gap:12px; height:68px}
+.top-in .logo{margin-right:auto}
+.layout{width:min(1180px, 100% - 32px); margin:24px auto 0; display:grid; grid-template-columns:230px 1fr; gap:28px; align-items:start; padding-bottom:140px}
+.side{position:sticky; top:calc(env(safe-area-inset-top,0px) + 92px); display:grid; gap:2px}
+.side a{padding:10px 14px; border-radius:12px; text-decoration:none; color:var(--muted); font-weight:600; font-size:.95rem}
+.side a:hover{background:var(--surface); color:var(--ink)}
+.main{display:grid; gap:18px; min-width:0}
+.jump{display:none}
+.hello h1{font-size:clamp(1.6rem, 4vw, 2.2rem)}
+.hello p{color:var(--muted); margin-top:8px; max-width:60ch}
+.sec{display:grid; gap:16px}
+.sec > h2{font-size:1.5rem}
+.sec .note{color:var(--muted); background:var(--bg); padding:12px 16px; border-radius:14px; font-size:.95rem}
+.subhead{font-size:1.05rem; margin-top:10px; padding-top:16px; border-top:1px solid var(--line)}
+.fld small{color:var(--muted); font-weight:500; font-size:.85rem}
+.fld .bad{border-color:var(--red)}
+.items{display:grid; gap:12px}
+.item{border:1.5px solid var(--line); border-radius:20px; padding:16px; display:grid; gap:12px}
+.item-head{display:flex; align-items:center; justify-content:space-between; gap:10px; font-weight:700; color:var(--ink)}
+.item-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px}
+.item-grid .wide{grid-column:1 / -1}
+.add{justify-self:start}
+
+/* Photos */
+.img-fld{display:grid; grid-template-columns:150px 1fr; gap:18px; align-items:start}
+.img-fld .pv{width:100%; border-radius:18px; overflow:hidden; background:var(--bg)}
+.img-fld .pv img{width:100%; height:100%; object-fit:cover; display:block}
+.img-fld .ctrl{display:grid; gap:10px; align-content:start}
+.img-fld .ctrl b{color:var(--ink)}
+.check{display:flex !important; grid-template-columns:none; align-items:center; gap:10px; font-weight:600}
+.check input{width:20px; height:20px; accent-color:var(--blue)}
+.file-btn{position:relative; overflow:hidden}
+.file-btn input{position:absolute; inset:0; opacity:0; cursor:pointer}
+.status{font-size:.9rem; color:var(--muted); font-weight:600}
+@media (max-width: 520px){ .img-fld{grid-template-columns:110px 1fr} }
+
+/* Reviews moderation */
+.rv-list{display:grid; gap:12px}
+.rv{border:1.5px solid var(--line); border-radius:20px; padding:16px 18px; display:grid; gap:10px}
+.rv.off{background:var(--bg); border-style:dashed}
+.rv-top{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 12px}
+.rv-top b{color:var(--ink)}
+.rv-top span{color:var(--muted); font-size:.9rem}
+.rv .stars{color:var(--blue); letter-spacing:1px}
+.rv .stars .o{color:var(--line)}
+.rv p{white-space:pre-line; overflow-wrap:anywhere}
+.rv-actions{display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px}
+.switch{display:inline-flex; align-items:center; gap:10px; font-weight:600; font-size:.93rem; cursor:pointer}
+.switch input{appearance:none; -webkit-appearance:none; width:44px; height:26px; border-radius:99px; background:var(--line); position:relative; padding:0; cursor:pointer; transition:background .2s; border:0; flex:none}
+.switch input::after{content:""; position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%; background:#fff; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.switch input:checked{background:var(--green)}
+.switch input:checked::after{transform:translateX(18px)}
+.empty{color:var(--muted); background:var(--bg); padding:18px; border-radius:16px; text-align:center}
+.counts{color:var(--muted); font-weight:600}
+
+/* Save bar */
+.savebar{position:fixed; left:50%; bottom:calc(16px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); z-index:50; width:min(720px, calc(100% - 24px)); background:var(--ink); color:#fff; border-radius:999px; padding:10px 10px 10px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 20px 40px -18px rgba(0,0,0,.6)}
+.savebar #saveState{margin-right:auto; font-weight:600; font-size:.95rem; display:flex; align-items:center; gap:8px}
+.savebar #saveState::before{content:""; width:9px; height:9px; border-radius:50%; background:#34A853}
+.savebar.dirty #saveState::before{background:#F9AB00}
+.savebar .btn.light{background:transparent; color:#fff; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.3)}
+.toast{position:fixed; left:50%; top:calc(env(safe-area-inset-top,0px) + 16px); transform:translate(-50%, -160%); background:var(--ink); color:#fff; padding:12px 20px; border-radius:999px; font-weight:600; z-index:70; transition:transform .35s cubic-bezier(.2,.7,.2,1); max-width:calc(100% - 24px); text-align:center}
+.toast.show{transform:translate(-50%, 0)}
+.toast.bad{background:var(--red)}
+.loading{color:var(--muted); padding:40px; text-align:center; font-weight:600}
+
+@media (max-width: 900px){
+  .layout{grid-template-columns:1fr; margin-top:16px}
+  .side{display:none}
+  .jump{display:block}
+  .top-in .vs-label{display:none}
+  .savebar{padding-left:18px}
+  .savebar #saveState{font-size:.85rem}
+  .savebar #discardBtn{padding:.6em .9em}
+}
+</style>
+</head>
+<body>
+
+<!-- Not connected -->
+<div class="center" id="screenSetup" hidden>
+  <div class="card auth">
+    <div class="logo"><b>S</b><span>Samir Edu World</span></div>
+    <h1>Connect the database</h1>
+    <p class="sub">The admin page needs Supabase. Fill in your Project URL and anon key in <strong>config.js</strong>, run <strong>supabase-setup.sql</strong>, then reload this page.</p>
+  </div>
+</div>
+
+<!-- Login -->
+<div class="center" id="screenLogin" hidden>
+  <form class="card auth" id="loginForm" novalidate>
+    <div class="logo"><b>S</b><span>Samir Edu World<small>Admin</small></span></div>
+    <h1>Log in</h1>
+    <p class="sub">Edit your website. Changes go live the moment you save.</p>
+    <label>Email<input type="email" name="email" autocomplete="username" inputmode="email"></label>
+    <label>Password<input type="password" name="password" autocomplete="current-password"></label>
+    <p class="err" id="loginErr" role="alert"></p>
+    <button class="btn blue" type="submit" id="loginBtn">Log in</button>
+    <button class="link" type="button" id="forgotBtn">Forgot password?</button>
+    <p class="msg" id="loginMsg" role="status"></p>
+  </form>
+</div>
+
+<!-- Set a new password (after the reset email) -->
+<div class="center" id="screenReset" hidden>
+  <form class="card auth" id="resetForm" novalidate>
+    <div class="logo"><b>S</b><span>Samir Edu World<small>Admin</small></span></div>
+    <h1>Choose a new password</h1>
+    <label>New password<input type="password" name="p1" autocomplete="new-password" minlength="8"></label>
+    <label>Type it again<input type="password" name="p2" autocomplete="new-password" minlength="8"></label>
+    <p class="err" id="resetErr" role="alert"></p>
+    <button class="btn blue" type="submit">Save password and continue</button>
+  </form>
+</div>
+
+<!-- Editor -->
+<div id="screenApp" hidden>
+  <header class="top">
+    <div class="top-in">
+      <div class="logo"><b>S</b><span>Samir Edu World<small>Admin</small></span></div>
+      <a class="btn light sm" href="./" target="_blank" rel="noopener"><span class="vs-label">View&nbsp;</span>website</a>
+      <button class="btn light sm" id="logoutBtn" type="button">Log out</button>
+    </div>
+  </header>
+  <div class="layout">
+    <nav class="side" id="sideNav" aria-label="Sections"></nav>
+    <div class="main">
+      <div class="card hello">
+        <h1 id="helloTitle">Welcome</h1>
+        <p>Change anything below, then press <strong>Save changes</strong> at the bottom. Your website updates straight away, no code needed.</p>
+      </div>
+      <select class="jump" id="jump" aria-label="Go to section"></select>
+      <div id="sections" class="main"><p class="loading">Loading your website…</p></div>
+      <section class="card sec" id="sec-reviews">
+        <h2>Reviews</h2>
+        <p class="note">Switch a review off to hide it from the website, or delete it for good. Changes here happen instantly; no need to press Save.</p>
+        <p class="counts" id="rvCounts"></p>
+        <div class="rv-list" id="rvList"><p class="loading">Loading reviews…</p></div>
+        <button class="btn light sm add" id="rvReload" type="button">Refresh reviews</button>
+      </section>
+      <section class="card sec" id="sec-account">
+        <h2>Account</h2>
+        <p class="note" id="accountEmail"></p>
+        <form id="pwForm" class="items" novalidate>
+          <label class="fld">New password<input type="password" name="p1" autocomplete="new-password"></label>
+          <label class="fld">Type it again<input type="password" name="p2" autocomplete="new-password"></label>
+          <p class="err" id="pwErr" role="alert"></p>
+          <button class="btn sm add" type="submit">Change password</button>
+        </form>
+      </section>
+    </div>
+  </div>
+  <div class="savebar" id="saveBar">
+    <span id="saveState">All changes saved</span>
+    <button class="btn light sm" id="discardBtn" type="button" hidden>Undo</button>
+    <button class="btn blue" id="saveBtn" type="button" disabled>Save changes</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="site-content.js"></script>
+<script>
+(function admin(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const S = window.SiteContent;
+  const CFG = window.SITE_CONFIG || {};
+  const isRecovery = /type=recovery/.test(location.hash);
+  const sb = CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY && window.supabase ? window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY) : null;
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const isObj = v => v && typeof v === "object" && !Array.isArray(v);
+  function merge(a, b){ Object.keys(b || {}).forEach(k => { if (isObj(a[k]) && isObj(b[k])) merge(a[k], b[k]); else a[k] = clone(b[k]); }); return a; }
+  const screens = ["screenSetup", "screenLogin", "screenReset", "screenApp"];
+  const show = id => screens.forEach(x => $(x).hidden = x !== id);
+
+  let defaults = {}, saved = {}, current = {}, dirty = false, inApp = false;
+
+  let toastT;
+  function toast(msg, bad){ const t = $("toast"); t.textContent = msg; t.classList.toggle("bad", !!bad); t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 3600); }
+
+  /* ---------- Auth ---------- */
+  async function init(){
+    if (!sb) return show("screenSetup");
+    sb.auth.onAuthStateChange(ev => {
+      if (ev === "PASSWORD_RECOVERY") show("screenReset");
+      if (ev === "SIGNED_OUT") { inApp = false; show("screenLogin"); }
+    });
+    if (isRecovery) return show("screenReset");
+    const { data } = await sb.auth.getSession();
+    if (data && data.session) enterApp(data.session); else show("screenLogin");
+  }
+
+  $("loginForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const f = e.target, err = $("loginErr"); err.textContent = ""; $("loginMsg").textContent = "";
+    const email = f.email.value.trim(), password = f.password.value;
+    if (!email || !password) { err.textContent = "Enter your email and password."; return; }
+    const b = $("loginBtn"); b.disabled = true; b.textContent = "Logging in…";
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    b.disabled = false; b.textContent = "Log in";
+    if (error) { err.textContent = /invalid/i.test(error.message) ? "That email and password don’t match." : "Couldn’t log in. Check your internet and try again."; return; }
+    f.password.value = "";
+    enterApp(data.session);
+  });
+
+  $("forgotBtn").addEventListener("click", async () => {
+    const email = $("loginForm").email.value.trim(), err = $("loginErr"); err.textContent = "";
+    if (!email) { err.textContent = "Type your email above first, then tap Forgot password."; return; }
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+    if (error) { err.textContent = "Couldn’t send the email. Try again in a minute."; return; }
+    $("loginMsg").textContent = "Check your email for a link to choose a new password.";
+  });
+
+  $("resetForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const f = e.target, err = $("resetErr"); err.textContent = "";
+    if (f.p1.value.length < 8) { err.textContent = "Use at least 8 characters."; return; }
+    if (f.p1.value !== f.p2.value) { err.textContent = "The two passwords don’t match."; return; }
+    const { error } = await sb.auth.updateUser({ password: f.p1.value });
+    if (error) { err.textContent = "Couldn’t save the password. Open the link from your email again."; return; }
+    history.replaceState(null, "", location.pathname);
+    const { data } = await sb.auth.getSession();
+    toast("Password saved.");
+    enterApp(data.session);
+  });
+
+  $("logoutBtn").addEventListener("click", async () => {
+    if (dirty && !confirm("You have unsaved changes. Log out anyway?")) return;
+    dirty = false; await sb.auth.signOut(); show("screenLogin");
+  });
+
+  async function enterApp(session){
+    if (inApp) return;
+    const { data: ok, error } = await sb.rpc("is_admin");
+    if (error || !ok) {
+      await sb.auth.signOut(); show("screenLogin");
+      $("loginErr").textContent = "This account isn’t allowed to edit the website."; return;
+    }
+    inApp = true; show("screenApp");
+    $("accountEmail").textContent = "Logged in as " + ((session && session.user && session.user.email) || "admin") + ".";
+    try {
+      const html = await (await fetch("index.html", { cache: "no-store" })).text();
+      defaults = S.read(new DOMParser().parseFromString(html, "text/html"));
+    } catch (x) { defaults = {}; }
+    const { data } = await sb.from("site_content").select("data").eq("id", "main").maybeSingle();
+    saved = (data && data.data) || {};
+    current = merge(clone(defaults), saved);
+    build(); setDirty(false); loadReviews();
+  }
+
+  /* ---------- Form building ---------- */
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function input(type, value, attrs){
+    if (type === "textarea") return '<textarea ' + attrs + '>' + esc(value) + '</textarea>';
+    if (type === "rating") return '<select ' + attrs + '>' + [5, 4, 3, 2, 1].map(n => '<option value="' + n + '"' + (+value === n ? " selected" : "") + '>' + "★".repeat(n) + " (" + n + ")</option>").join("") + "</select>";
+    const t = type === "phone" ? 'type="tel" inputmode="numeric"' : type === "email" ? 'type="email" inputmode="email"' : 'type="text"';
+    return '<input ' + t + ' value="' + esc(value) + '" ' + attrs + '>';
+  }
+  function field(f){
+    if (f.type === "heading") return '<h3 class="subhead">' + esc(f.label) + "</h3>";
+    const v = S.get(current, f.key);
+    if (f.type === "list") return '<label class="fld">' + esc(f.label) + input("text", (v || []).join(", "), 'data-key="' + f.key + '" data-type="list"') + "<small>Separate with commas.</small></label>";
+    if (f.type === "image") {
+      return '<div class="img-fld" data-img-field="' + f.key + '"><div class="pv" style="aspect-ratio:' + f.aspect + '"><img alt="" src="' + esc(v || "") + '"></div>'
+        + '<div class="ctrl"><b>' + esc(f.label) + '</b><label class="check"><input type="checkbox" checked> Pencil-drawing style</label>'
+        + '<span class="btn light sm file-btn">Upload a new photo<input type="file" accept="image/*" aria-label="Upload a new photo for: ' + esc(f.label) + '"></span>'
+        + '<span class="status">Tip: a clear photo, face well lit, works best.</span><input type="hidden" data-key="' + f.key + '" data-type="image" value="' + esc(v || "") + '"></div></div>';
+    }
+    if (f.type === "items") {
+      const arr = Array.isArray(v) ? v : [];
+      const n = f.fixed || arr.length;
+      let h = '<div class="items" data-items="' + f.key + '"' + (f.fixed ? ' data-fixed="1"' : "") + ">";
+      for (let i = 0; i < n; i++) h += item(f, arr[i] || {}, i);
+      h += "</div>";
+      if (!f.fixed) h += '<button type="button" class="btn light sm add" data-add="' + f.key + '">+ ' + esc(f.add || "Add") + "</button>";
+      return h;
+    }
+    return '<label class="fld">' + esc(f.label) + input(f.type, f.type === "phone" ? S.national(v) : v, 'data-key="' + f.key + '" data-type="' + f.type + '"') + (f.help ? "<small>" + esc(f.help) + "</small>" : "") + "</label>";
+  }
+  function item(f, obj, i){
+    return '<div class="item"><div class="item-head"><span>' + esc(f.label) + " " + (i + 1) + "</span>" + (f.fixed ? "" : '<button type="button" class="btn danger sm" data-remove>Remove</button>') + '</div><div class="item-grid">'
+      + f.fields.map(g => '<label class="fld' + (g.type === "textarea" ? " wide" : "") + '">' + esc(g.label) + input(g.type, obj[g.key] == null ? (g.type === "rating" ? 5 : "") : obj[g.key], 'data-f="' + g.key + '"') + (g.help ? "<small>" + esc(g.help) + "</small>" : "") + "</label>").join("")
+      + "</div></div>";
+  }
+  function build(){
+    const box = $("sections"), nav = $("sideNav"), jump = $("jump");
+    box.innerHTML = ""; nav.innerHTML = ""; jump.innerHTML = '<option value="">Go to a section…</option>';
+    S.SCHEMA.forEach(sec => {
+      const el = document.createElement("section");
+      el.className = "card sec"; el.id = "sec-" + sec.id;
+      el.innerHTML = "<h2>" + esc(sec.title) + "</h2>" + (sec.note ? '<p class="note">' + esc(sec.note) + "</p>" : "") + sec.fields.map(field).join("");
+      box.appendChild(el);
+    });
+    [...S.SCHEMA.map(s => [s.id, s.title]), ["reviews", "Reviews"], ["account", "Account"]].forEach(([id, t]) => {
+      nav.insertAdjacentHTML("beforeend", '<a href="#sec-' + id + '">' + esc(t) + "</a>");
+      jump.insertAdjacentHTML("beforeend", '<option value="sec-' + id + '">' + esc(t) + "</option>");
+    });
+    const name = S.get(current, "profile.name") || "";
+    $("helloTitle").textContent = "Welcome, " + (name.split(" ")[0] || "back");
+    box.querySelectorAll("input[type=file]").forEach(inp => inp.addEventListener("change", onPhoto));
+  }
+  $("jump").addEventListener("change", e => { const el = $(e.target.value); if (el) el.scrollIntoView({ behavior: "smooth" }); e.target.value = ""; });
+
+  const sections = $("sections");
+  sections.addEventListener("input", () => setDirty(true));
+  sections.addEventListener("change", () => setDirty(true));
+  sections.addEventListener("click", e => {
+    const add = e.target.closest("[data-add]"), rem = e.target.closest("[data-remove]");
+    if (add) {
+      const key = add.dataset.add, f = findField(key), list = sections.querySelector('[data-items="' + key + '"]');
+      list.insertAdjacentHTML("beforeend", item(f, {}, list.children.length));
+      list.lastElementChild.querySelector("input, textarea").focus();
+      setDirty(true);
+    }
+    if (rem) {
+      const it = rem.closest(".item"), list = it.parentElement, f = findField(list.dataset.items);
+      it.remove();
+      [...list.children].forEach((c, i) => c.querySelector(".item-head span").textContent = f.label + " " + (i + 1));
+      setDirty(true);
+    }
+  });
+  function findField(key){ for (const s of S.SCHEMA) for (const f of s.fields) if (f.key === key) return f; }
+
+  function collect(){
+    const c = {};
+    sections.querySelectorAll("[data-key]").forEach(el => {
+      const t = el.dataset.type, v = el.value.trim();
+      if (t === "list") S.set(c, el.dataset.key, v.split(",").map(x => x.trim()).filter(Boolean));
+      else if (t === "phone") S.set(c, el.dataset.key, S.national(v));
+      else S.set(c, el.dataset.key, v);
+    });
+    sections.querySelectorAll("[data-items]").forEach(list => {
+      S.set(c, list.dataset.items, [...list.children].map(it => {
+        const o = {};
+        it.querySelectorAll("[data-f]").forEach(el => { o[el.dataset.f] = el.dataset.f === "rating" ? +el.value : el.value.trim(); });
+        return o;
+      }));
+    });
+    return c;
+  }
+  function validate(c){
+    sections.querySelectorAll(".bad").forEach(x => x.classList.remove("bad"));
+    const problems = [];
+    const mark = key => { const el = sections.querySelector('[data-key="' + key + '"]'); if (el) el.classList.add("bad"); return el; };
+    const phone = S.get(c, "contact.phone");
+    if (phone && phone.length !== 10) problems.push([mark("contact.phone"), "The phone number needs 10 digits."]);
+    const email = S.get(c, "contact.email");
+    if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) problems.push([mark("contact.email"), "The email address doesn’t look right."]);
+    ["profile.name", "hero.word1", "hero.word2", "hero.year"].forEach(k => { if (!S.get(c, k)) problems.push([mark(k), "Some important fields are empty."]); });
+    if (problems.length) { const [el, msg] = problems[0]; if (el) el.scrollIntoView({ behavior: "smooth", block: "center" }); toast(msg, true); return false; }
+    return true;
+  }
+
+  function setDirty(v){
+    dirty = v;
+    $("saveBar").classList.toggle("dirty", v);
+    $("saveState").textContent = v ? "Unsaved changes" : "All changes saved";
+    $("saveBtn").disabled = !v; $("discardBtn").hidden = !v;
+  }
+  $("discardBtn").addEventListener("click", () => {
+    if (!confirm("Undo all changes since your last save?")) return;
+    current = merge(clone(defaults), saved); build(); setDirty(false);
+  });
+  $("saveBtn").addEventListener("click", async () => {
+    const c = collect();
+    if (!validate(c)) return;
+    const b = $("saveBtn"); b.disabled = true; b.textContent = "Saving…";
+    const { error } = await sb.from("site_content").upsert({ id: "main", data: c, updated_at: new Date().toISOString() });
+    b.textContent = "Save changes";
+    if (error) { b.disabled = false; toast("Couldn’t save. Check your internet and try again.", true); return; }
+    saved = c; current = merge(clone(defaults), saved);
+    try { localStorage.setItem("sew-content", JSON.stringify(c)); } catch (x) {}
+    setDirty(false); toast("Saved. Your website is updated.");
+  });
+  addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+  /* ---------- Photos: crop, optional pencil effect, upload ---------- */
+  async function onPhoto(e){
+    const file = e.target.files && e.target.files[0]; if (!file) return;
+    const wrap = e.target.closest("[data-img-field]"), key = wrap.dataset.imgField, f = findField(key);
+    const status = wrap.querySelector(".status"), pencil = wrap.querySelector(".check input").checked;
+    status.textContent = pencil ? "Making the pencil drawing…" : "Preparing the photo…";
+    try {
+      const blob = await processPhoto(file, pencil, f.aspect);
+      wrap.querySelector(".pv img").src = URL.createObjectURL(blob);
+      status.textContent = "Uploading…";
+      const path = "photos/" + key.replace(/\W+/g, "-") + "-" + Date.now() + ".jpg";
+      const { error } = await sb.storage.from("site-images").upload(path, blob, { contentType: "image/jpeg", cacheControl: "31536000" });
+      if (error) throw error;
+      wrap.querySelector('input[type=hidden]').value = sb.storage.from("site-images").getPublicUrl(path).data.publicUrl;
+      status.textContent = "Uploaded. Press Save changes to put it on the website.";
+      setDirty(true);
+    } catch (x) {
+      status.textContent = "That photo couldn’t be uploaded. Try another photo or check your internet.";
+    }
+    e.target.value = "";
+  }
+  function loadImage(file){
+    return new Promise((res, rej) => { const img = new Image(); img.onload = () => res(img); img.onerror = rej; img.src = URL.createObjectURL(file); });
+  }
+  async function processPhoto(file, pencil, aspect){
+    const img = await loadImage(file);
+    const W = 960, H = Math.round(W / aspect);
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    let cw = iw, ch = iw / aspect;
+    if (ch > ih) { ch = ih; cw = ih * aspect; }
+    const sx = (iw - cw) / 2, sy = Math.max(0, (ih - ch) * 0.2);
+    const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    const ctx = cv.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(img, sx, sy, cw, ch, 0, 0, W, H);
+    if (pencil) pencilize(ctx, W, H);
+    return new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error("encode")), "image/jpeg", 0.86));
+  }
+  function blur1D(src, dst, w, h, r, horizontal){
+    const len = horizontal ? w : h, lines = horizontal ? h : w, stride = horizontal ? 1 : w, step = horizontal ? w : 1;
+    const acc = new Float32Array(len + 1);
+    for (let l = 0; l < lines; l++) {
+      const base = l * step;
+      for (let i = 0; i < len; i++) acc[i + 1] = acc[i] + src[base + i * stride];
+      for (let i = 0; i < len; i++) { const a = Math.max(0, i - r), b = Math.min(len - 1, i + r); dst[base + i * stride] = (acc[b + 1] - acc[a]) / (b - a + 1); }
+    }
+  }
+  function hatchLayer(w, h, angle, len){
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    const x = c.getContext("2d", { willReadFrequently: true });
+    x.strokeStyle = "#000"; x.lineWidth = 1.1; x.globalAlpha = 0.5; x.lineCap = "round";
+    const dx = Math.cos(angle) * len / 2, dy = Math.sin(angle) * len / 2, total = Math.round(w * h / 38);
+    for (let done = 0; done < total; done += 1500) {
+      x.beginPath();
+      for (let i = 0; i < 1500; i++) { const px = Math.random() * w, py = Math.random() * h, k = 0.6 + Math.random() * 0.8; x.moveTo(px - dx * k, py - dy * k); x.lineTo(px + dx * k, py + dy * k); }
+      x.stroke();
+    }
+    return x.getImageData(0, 0, w, h).data;
+  }
+  function pencilize(ctx, w, h){
+    const id = ctx.getImageData(0, 0, w, h), d = id.data, n = w * h;
+    const g = new Float32Array(n), hist = new Uint32Array(256);
+    for (let i = 0, j = 0; i < n; i++, j += 4) { g[i] = 0.299 * d[j] + 0.587 * d[j + 1] + 0.114 * d[j + 2]; hist[g[i] | 0]++; }
+    let lo = 0, hi = 255, sum = 0;
+    for (let v = 0; v < 256; v++) { sum += hist[v]; if (sum > n * 0.02) { lo = v; break; } }
+    sum = 0; for (let v = 255; v >= 0; v--) { sum += hist[v]; if (sum > n * 0.02) { hi = v; break; } }
+    const span = Math.max(1, hi - lo);
+    for (let i = 0; i < n; i++) g[i] = Math.min(255, Math.max(0, (g[i] - lo) / span * 255));
+    const a = new Float32Array(n), b = new Float32Array(n), t = new Float32Array(n), u = new Float32Array(n);
+    for (let i = 0; i < n; i++) a[i] = 255 - g[i];
+    const r = Math.max(4, Math.round(w / 110));
+    for (let p = 0; p < 3; p++) { blur1D(a, b, w, h, r, true); blur1D(b, a, w, h, r, false); }
+    for (let i = 0; i < n; i++) t[i] = (255 - g[i]) / 255;
+    blur1D(t, u, w, h, 2, true); blur1D(u, t, w, h, 2, false);
+    const h1 = hatchLayer(w, h, -0.62, 18), h2 = hatchLayer(w, h, 0.87, 14);
+    const clamp = v => v < 0 ? 0 : v > 1 ? 1 : v;
+    for (let i = 0, j = 0; i < n; i++, j += 4) {
+      const dodge = Math.min(255, g[i] * 255 / (256 - a[i]));
+      const tone = t[i];
+      let D = clamp((255 - dodge) / 255 * 1.7)
+        + Math.pow(tone, 1.5) * 0.36
+        + h1[j + 3] / 255 * clamp((tone - 0.28) * 2) * 0.5
+        + h2[j + 3] / 255 * clamp((tone - 0.55) * 2.5) * 0.5;
+      D = clamp(D * (0.86 + Math.random() * 0.24));
+      d[j] = 244 * (1 - D) + 22 * D; d[j + 1] = 244 * (1 - D) + 22 * D; d[j + 2] = 242 * (1 - D) + 26 * D;
+    }
+    ctx.putImageData(id, 0, 0);
+  }
+
+  /* ---------- Reviews ---------- */
+  $("rvReload").addEventListener("click", loadReviews);
+  async function loadReviews(){
+    const box = $("rvList");
+    box.innerHTML = '<p class="loading">Loading reviews…</p>';
+    const { data, error } = await sb.from("reviews").select("*").order("created_at", { ascending: false }).limit(500);
+    if (error) { box.innerHTML = '<p class="empty">Couldn’t load reviews. Tap Refresh reviews to try again.</p>'; return; }
+    const hidden = data.filter(r => !r.approved).length;
+    $("rvCounts").textContent = data.length ? data.length + (data.length === 1 ? " review" : " reviews") + (hidden ? ", " + hidden + " hidden from the website" : "") : "";
+    if (!data.length) { box.innerHTML = '<p class="empty">No reviews yet. When someone posts a review on your website, it shows up here.</p>'; return; }
+    box.innerHTML = "";
+    data.forEach(r => {
+      const el = document.createElement("article");
+      el.className = "rv" + (r.approved ? "" : " off");
+      el.innerHTML = '<div class="rv-top"><span class="stars"></span><b></b><span class="meta"></span></div><p></p><div class="rv-actions"><label class="switch"><input type="checkbox"> <span>Shown on website</span></label><button class="btn danger sm" type="button">Delete</button></div>';
+      el.querySelector(".stars").innerHTML = "★".repeat(r.rating) + '<span class="o">' + "★".repeat(5 - r.rating) + "</span>";
+      el.querySelector("b").textContent = r.name;
+      el.querySelector(".meta").textContent = r.role + ", " + new Date(r.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      el.querySelector("p").textContent = r.message;
+      const sw = el.querySelector(".switch input"); sw.checked = !!r.approved;
+      sw.addEventListener("change", async () => {
+        const { error } = await sb.from("reviews").update({ approved: sw.checked }).eq("id", r.id);
+        if (error) { sw.checked = !sw.checked; toast("Couldn’t change that review. Try again.", true); return; }
+        el.classList.toggle("off", !sw.checked);
+        toast(sw.checked ? "Review is showing on the website." : "Review hidden from the website.");
+      });
+      el.querySelector(".danger").addEventListener("click", async () => {
+        if (!confirm("Delete the review from " + r.name + "? This can’t be undone.")) return;
+        const { error } = await sb.from("reviews").delete().eq("id", r.id);
+        if (error) { toast("Couldn’t delete that review. Try again.", true); return; }
+        el.remove(); toast("Review deleted.");
+      });
+      box.appendChild(el);
+    });
+  }
+
+  /* ---------- Account ---------- */
+  $("pwForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const f = e.target, err = $("pwErr"); err.textContent = "";
+    if (f.p1.value.length < 8) { err.textContent = "Use at least 8 characters."; return; }
+    if (f.p1.value !== f.p2.value) { err.textContent = "The two passwords don’t match."; return; }
+    const { error } = await sb.auth.updateUser({ password: f.p1.value });
+    if (error) { err.textContent = "Couldn’t change the password. Log out, log in again and retry."; return; }
+    f.reset(); toast("Password changed.");
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>
