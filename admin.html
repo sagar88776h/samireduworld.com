@@ -136,7 +136,8 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
   <div class="card auth">
     <div class="logo"><b>S</b><span>Samir Edu World</span></div>
     <h1>Connect the database</h1>
-    <p class="sub">The admin page needs Supabase. Fill in your Project URL and anon key in <strong>config.js</strong>, run <strong>supabase-setup.sql</strong>, then reload this page.</p>
+    <p class="sub">The admin page needs Supabase. Put your Project URL and Publishable key in <strong>config.js</strong>, run <strong>supabase-setup.sql</strong>, then reload this page.</p>
+    <p class="err" id="setupWhy"></p>
   </div>
 </div>
 
@@ -212,7 +213,7 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
 <script src="config.js"></script>
 <script src="site-content.js"></script>
 <script>
@@ -222,7 +223,19 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
   const S = window.SiteContent;
   const CFG = window.SITE_CONFIG || {};
   const isRecovery = /type=recovery/.test(location.hash);
-  const sb = CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY && window.supabase ? window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY) : null;
+  function setupProblem(){
+    const u = (CFG.SUPABASE_URL || "").trim(), k = (CFG.SUPABASE_ANON_KEY || "").trim();
+    if (!window.SITE_CONFIG) return "config.js didn’t load. Make sure it sits in the main folder of the repo, next to admin.html.";
+    if (!u || !k) return "config.js still has empty quotes. Paste your Project URL and Publishable key into it.";
+    if (/abcdxyz123|abcd1234|xxxx/i.test(u + k)) return "config.js still has the example values from the instructions. Replace them with the real Project URL and Publishable key from your own Supabase project.";
+    if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(u)) return "The Project URL doesn’t look right. It should look like https://yourprojectid.supabase.co with nothing after .co";
+    if (/^sb_secret_/.test(k) || /service_role/.test(atobSafe(k))) return "That’s the SECRET key. It must never be on a website. Use the Publishable key instead, and create a new secret key in Supabase, because this one is now public.";
+    if (!window.supabase) return "The Supabase library couldn’t load. Check your internet, or turn off any ad blocker for this site.";
+    return "";
+  }
+  function atobSafe(k){ try { return atob(k.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")); } catch (x) { return ""; } }
+  const problem = setupProblem();
+  const sb = problem ? null : window.supabase.createClient(CFG.SUPABASE_URL.trim(), CFG.SUPABASE_ANON_KEY.trim());
   const clone = o => JSON.parse(JSON.stringify(o));
   const isObj = v => v && typeof v === "object" && !Array.isArray(v);
   function merge(a, b){ Object.keys(b || {}).forEach(k => { if (isObj(a[k]) && isObj(b[k])) merge(a[k], b[k]); else a[k] = clone(b[k]); }); return a; }
@@ -236,7 +249,7 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
 
   /* ---------- Auth ---------- */
   async function init(){
-    if (!sb) return show("screenSetup");
+    if (!sb) { $("setupWhy").textContent = problem; return show("screenSetup"); }
     sb.auth.onAuthStateChange(ev => {
       if (ev === "PASSWORD_RECOVERY") show("screenReset");
       if (ev === "SIGNED_OUT") { inApp = false; show("screenLogin"); }
@@ -254,10 +267,20 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
     const b = $("loginBtn"); b.disabled = true; b.textContent = "Logging in…";
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
     b.disabled = false; b.textContent = "Log in";
-    if (error) { err.textContent = /invalid/i.test(error.message) ? "That email and password don’t match." : "Couldn’t log in. Check your internet and try again."; return; }
+    if (error) { err.textContent = loginError(error); return; }
     f.password.value = "";
     enterApp(data.session);
   });
+
+  function loginError(error){
+    const m = String((error && error.message) || "");
+    if (/invalid login|invalid credentials/i.test(m)) return "That email and password don’t match.";
+    if (/not confirmed/i.test(m)) return "This account isn’t confirmed. In Supabase → Authentication → Users, delete it and create it again with “Auto Confirm User” ticked.";
+    if (/api key|apikey|unregistered/i.test(m)) return "Supabase rejected the key in config.js. Copy the Publishable key again from your project and paste it exactly.";
+    if (/email logins are disabled|provider is disabled/i.test(m)) return "Email login is switched off. In Supabase → Authentication → Sign In / Providers, turn the Email provider back on.";
+    if (/fetch|network|load failed/i.test(m)) return "Couldn’t reach the database. Check that the Project URL in config.js is correct and your internet is on.";
+    return "Couldn’t log in: " + m;
+  }
 
   $("forgotBtn").addEventListener("click", async () => {
     const email = $("loginForm").email.value.trim(), err = $("loginErr"); err.textContent = "";
