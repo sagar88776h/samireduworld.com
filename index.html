@@ -309,6 +309,23 @@ footer{padding:40px 0 calc(50px + env(safe-area-inset-bottom,0px)); color:var(--
 @media (max-width: 860px){ .where{grid-template-columns:1fr} }
 
 /* Reviews */
+.rv-bar{display:flex; align-items:center; flex-wrap:wrap; gap:16px 24px; background:var(--surface); border-radius:28px; padding:16px 16px 16px 28px; margin-bottom:18px}
+.rv-score{display:flex; align-items:center; gap:14px; margin-right:auto}
+.rv-score b{font-size:2.6rem; font-weight:700; letter-spacing:-.04em; line-height:1; color:var(--ink)}
+.rv-score .stars-lg{font-size:1.15rem}
+.rv-score span{color:var(--muted); font-weight:500; font-size:.95rem}
+.quote.fresh{animation:fresh 1.8s cubic-bezier(.2,.7,.2,1)}
+.quote figcaption .who{font-weight:700; color:var(--ink); font-size:1rem}
+.quote .stars .off{color:var(--line)}
+.quote blockquote{white-space:pre-line; overflow-wrap:anywhere}
+.rv-dialog{border:0; padding:0; background:transparent; width:min(580px, calc(100% - 28px)); max-width:none; max-height:calc(100dvh - 28px); overflow:auto; color:var(--text)}
+.rv-dialog::backdrop{background:rgba(0,0,0,.5); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px)}
+.rv-dialog[open]{animation:pop .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes pop{from{opacity:0; transform:translateY(20px) scale(.97)}}
+.rv-dialog form{position:relative; box-shadow:var(--shadow)}
+.rv-x{position:absolute; top:16px; right:16px; width:40px; height:40px; background:var(--bg); box-shadow:none}
+@media (max-width: 620px){ .rv-bar{padding:20px} .rv-bar .btn{width:100%; justify-content:space-between} }
+
 [hidden]{display:none !important}
 .hero-rating{margin-top:24px; display:inline-flex; align-items:center; gap:10px; font-weight:600; color:var(--muted); text-decoration:none}
 .hero-rating .s{color:var(--blue); letter-spacing:2px}
@@ -621,34 +638,35 @@ footer{padding:40px 0 calc(50px + env(safe-area-inset-bottom,0px)); color:var(--
 <section class="block" id="reviews" aria-labelledby="reviews-title" style="padding-top:0">
   <div class="wrap">
     <div class="sec-head">
-      <div class="left"><p class="badge reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg></i>Reviews</p><h2 id="reviews-title" data-split>What students <em class="script">say</em></h2></div>
+      <div class="left"><p class="badge reveal"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg></i>Kind words</p><h2 id="reviews-title" data-split>What students <em class="script">say</em></h2></div>
       <p class="reveal">Real reviews from students, parents and colleagues. A new review shows up here the moment it’s posted.</p>
     </div>
-    <p class="preview-note" id="rvPreview" hidden>Preview mode: the review database isn’t connected yet, so reviews you post here aren’t saved.</p>
-    <div class="rv-top">
-      <div class="rv-summary reveal">
-        <div class="live"><span class="dot"></span><span id="rvLive">Connecting…</span></div>
-        <div class="avg"><b id="rvAvg">–</b><div><div class="stars-lg" id="rvAvgStars" aria-hidden="true"></div><span id="rvCount">No reviews yet</span></div></div>
-        <div class="bars" id="rvBars" aria-label="Rating breakdown"><div class="bar" data-s="5"><span>5</span><i><em></em></i><small>0</small></div><div class="bar" data-s="4"><span>4</span><i><em></em></i><small>0</small></div><div class="bar" data-s="3"><span>3</span><i><em></em></i><small>0</small></div><div class="bar" data-s="2"><span>2</span><i><em></em></i><small>0</small></div><div class="bar" data-s="1"><span>1</span><i><em></em></i><small>0</small></div></div>
-      </div>
-      <form class="rv-form reveal" id="rvForm" novalidate>
-        <h3>Write a review</h3>
-        <fieldset class="rate"><legend>Your rating</legend><div class="rate-stars"><input type="radio" name="rating" id="rs1" value="1"><label for="rs1" title="1 star"><span class="sr-only">1 star</span><span aria-hidden="true">★</span></label><input type="radio" name="rating" id="rs2" value="2"><label for="rs2" title="2 stars"><span class="sr-only">2 stars</span><span aria-hidden="true">★</span></label><input type="radio" name="rating" id="rs3" value="3"><label for="rs3" title="3 stars"><span class="sr-only">3 stars</span><span aria-hidden="true">★</span></label><input type="radio" name="rating" id="rs4" value="4"><label for="rs4" title="4 stars"><span class="sr-only">4 stars</span><span aria-hidden="true">★</span></label><input type="radio" name="rating" id="rs5" value="5"><label for="rs5" title="5 stars"><span class="sr-only">5 stars</span><span aria-hidden="true">★</span></label></div></fieldset>
-        <div class="row">
-          <label>Your name<input name="name" maxlength="60" autocomplete="name"></label>
-          <label>I am a<select name="role"><option>Student</option><option>Parent</option><option>College student</option><option>Former student</option><option>Teacher or colleague</option></select></label>
-        </div>
-        <label>Your review<textarea name="message" maxlength="600" placeholder="What was it like to learn from Samir Sir?"></textarea><small class="count"><span id="rvChars">0</span>/600</small></label>
-        <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
-        <p class="err" id="rvErr" role="alert"></p>
-        <p class="ok" id="rvOk" role="status" hidden></p>
-        <div class="rv-actions"><button class="btn blue" type="submit" id="rvSubmit">Post review<span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><small>Reviews are public. Please be kind and honest.</small></div>
-      </form>
+    <div class="rv-bar reveal">
+      <div class="rv-score"><b id="rvAvg">–</b><div><div class="stars-lg" id="rvAvgStars" aria-hidden="true"></div><span id="rvCount">No reviews yet</span></div></div>
+      <div class="live"><span class="dot"></span><span id="rvLive">Connecting…</span></div>
+      <button class="btn blue magnetic" id="rvOpen" type="button">Write a review<span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span></button>
     </div>
-    <div class="rv-list" id="rvList"></div>
+    <div class="quotes" id="rvList"></div>
     <div class="rv-more"><button class="btn light" id="rvMore" type="button" hidden>Show more reviews<span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span></button></div>
   </div>
 </section>
+<dialog class="rv-dialog" id="rvDialog" aria-labelledby="rvFormTitle" data-lenis-prevent>
+  <form class="rv-form" id="rvForm" novalidate>
+    <button class="round rv-x" id="rvClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <h3 id="rvFormTitle">Write a review</h3>
+    <p class="preview-note" id="rvPreview" hidden>Preview mode: the review database isn’t connected yet, so this review won’t be saved.</p>
+    <fieldset class="rate"><legend>Your rating</legend><div class="rate-stars"><input type="radio" name="rating" id="rs1" value="1"><label for="rs1" title="1 star"><span class="sr-only">1 star</span><span aria-hidden="true">★</span></label><input type="radio" name="rating" id="rs2" value="2"><label for="rs2" title="2 stars"><span class="sr-only">2 stars</span><span aria-hidden="true">★</span></label><input type="radio" name="rating" id="rs3" value="3"><label for="rs3" title="3 stars"><span class="sr-only">3 stars</span><span aria-hidden="true">★</span></label><input type="radio" name="rating" id="rs4" value="4"><label for="rs4" title="4 stars"><span class="sr-only">4 stars</span><span aria-hidden="true">★</span></label><input type="radio" name="rating" id="rs5" value="5"><label for="rs5" title="5 stars"><span class="sr-only">5 stars</span><span aria-hidden="true">★</span></label></div></fieldset>
+    <div class="row">
+      <label>Your name<input name="name" maxlength="60" autocomplete="name"></label>
+      <label>I am a<select name="role"><option>Student</option><option>Parent</option><option>College student</option><option>Former student</option><option>Teacher or colleague</option></select></label>
+    </div>
+    <label>Your review<textarea name="message" maxlength="600" placeholder="What was it like to learn from Samir Sir?"></textarea><small class="count"><span id="rvChars">0</span>/600</small></label>
+    <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+    <p class="err" id="rvErr" role="alert"></p>
+    <p class="ok" id="rvOk" role="status" hidden></p>
+    <div class="rv-actions"><button class="btn blue" type="submit" id="rvSubmit">Post review<span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><small>Reviews are public. Please be kind and honest.</small></div>
+  </form>
+</dialog>
 <div class="toast" id="rvToast" role="status" aria-live="polite"></div>
 
 <!-- CONTACT -->
@@ -745,7 +763,7 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
   const list = $("rvList"), form = $("rvForm"), errEl = $("rvErr"), okEl = $("rvOk"), moreBtn = $("rvMore"), liveTxt = $("rvLive"), toast = $("rvToast"), btn = $("rvSubmit");
   const configured = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
   const db = configured && window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-  let reviews = [], shown = 6;
+  let reviews = [], shown = 4;
   const fresh = new Set();
   const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
   const UNITS = [["minute", 60], ["hour", 3600], ["day", 86400], ["week", 604800], ["month", 2629800], ["year", 31557600]];
@@ -763,14 +781,14 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
     return h.slice(0, 8) + "-" + h.slice(8, 12) + "-" + h.slice(12, 16) + "-" + h.slice(16, 20) + "-" + h.slice(20);
   }
   function card(r){
-    const el = document.createElement("article");
-    el.className = "rv-card" + (fresh.has(r.id) ? " fresh" : "");
-    el.innerHTML = '<div class="rv-head"><i class="av"></i><div><b></b><span class="when"></span></div><span class="rv-stars" role="img"></span></div><p></p>';
-    el.querySelector(".av").textContent = (r.name.trim()[0] || "?").toUpperCase();
-    el.querySelector("b").textContent = r.name;
+    const el = document.createElement("figure");
+    el.className = "quote" + (fresh.has(r.id) ? " fresh" : "");
+    el.innerHTML = '<span class="stars" role="img"></span><blockquote></blockquote><figcaption><i></i><div><span class="who"></span><span class="when"></span></div></figcaption>';
+    const st = el.querySelector(".stars"); st.innerHTML = stars(r.rating); st.setAttribute("aria-label", "Rated " + r.rating + " out of 5");
+    el.querySelector("blockquote").textContent = r.message;
+    el.querySelector("i").textContent = (r.name.trim()[0] || "?").toUpperCase();
+    const who = el.querySelector(".who"); who.textContent = r.name;
     const w = el.querySelector(".when"); w.dataset.t = r.created_at; w.dataset.role = r.role; w.textContent = r.role + ", " + ago(r.created_at);
-    const st = el.querySelector(".rv-stars"); st.innerHTML = stars(r.rating); st.setAttribute("aria-label", "Rated " + r.rating + " out of 5");
-    el.querySelector("p").textContent = r.message;
     return el;
   }
   function render(){
@@ -778,10 +796,6 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
     $("rvAvg").textContent = n ? avg.toFixed(1) : "–";
     $("rvCount").textContent = n ? "Based on " + n + (n === 1 ? " review" : " reviews") : "No reviews yet";
     $("rvAvgStars").innerHTML = stars(Math.round(avg));
-    for (let s = 5; s >= 1; s--) {
-      const c = reviews.filter(r => r.rating === s).length, row = $("rvBars").querySelector('[data-s="' + s + '"]');
-      row.querySelector("em").style.width = (n ? c / n * 100 : 0) + "%"; row.querySelector("small").textContent = c;
-    }
     const hr = $("heroRating");
     if (n) { hr.hidden = false; $("heroStars").innerHTML = stars(Math.round(avg)); $("heroAvg").textContent = avg.toFixed(1); $("heroCount").textContent = n + (n === 1 ? " review" : " reviews"); }
     else hr.hidden = true;
@@ -813,7 +827,7 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
   async function start(){
     if (!configured) { $("rvPreview").hidden = false; setLive("preview"); render(); return; }
     if (!db) { setLive("offline"); list.innerHTML = '<p class="rv-empty">Reviews couldn’t load. Check your internet connection and refresh the page.</p>'; return; }
-    list.innerHTML = '<div class="rv-skel"></div><div class="rv-skel"></div><div class="rv-skel"></div>';
+    list.innerHTML = '<div class="rv-skel"></div><div class="rv-skel"></div>';
     setLive("connecting");
     const { data, error } = await db.from("reviews").select("id, created_at, name, role, rating, message").order("created_at", { ascending: false }).limit(500);
     if (error) { setLive("offline"); list.innerHTML = '<p class="rv-empty">Reviews couldn’t load right now. Refresh the page in a moment.</p>'; return; }
@@ -836,7 +850,13 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
   rate.querySelectorAll("label").forEach((l, k) => l.addEventListener("mouseenter", () => paint(k + 1)));
   rate.addEventListener("mouseleave", () => paint(checked()));
   form.message.addEventListener("input", () => $("rvChars").textContent = form.message.value.length);
-  moreBtn.addEventListener("click", () => { shown += 6; render(); });
+  moreBtn.addEventListener("click", () => { shown += 4; render(); });
+  const dlg = $("rvDialog");
+  const openDlg = () => { okEl.hidden = true; errEl.textContent = ""; dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", ""); };
+  const closeDlg = () => { dlg.close ? dlg.close() : dlg.removeAttribute("open"); };
+  $("rvOpen").addEventListener("click", openDlg);
+  $("rvClose").addEventListener("click", closeDlg);
+  dlg.addEventListener("click", e => { if (e.target === dlg) closeDlg(); });
   setInterval(() => list.querySelectorAll(".when").forEach(w => w.textContent = w.dataset.role + ", " + ago(w.dataset.t)), 60000);
 
   function fail(msg, el){ errEl.textContent = msg; if (el) el.focus(); }
@@ -858,6 +878,7 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
       if (db && REVIEWS_NEED_APPROVAL) okEl.textContent = "Thank you! Your review will appear once Samir Sir approves it.";
       else { upsert({ ...row, created_at: new Date().toISOString() }, { highlight: true, toast: false }); okEl.textContent = db ? "Thank you! Your review is live." : "Preview: your review shows below but isn’t saved yet."; }
       okEl.hidden = false;
+      setTimeout(() => { if (dlg.open) closeDlg(); }, 2200);
     } catch (x) {
       fail(String((x && x.message) || "").includes("Too many") ? "Lots of reviews are coming in right now. Please try again in a few minutes." : "Your review couldn’t be posted. Check your internet connection and try again.");
     } finally { btn.disabled = false; btn.firstChild.textContent = "Post review"; }
