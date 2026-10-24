@@ -311,6 +311,7 @@ footer{padding:40px 0 calc(50px + env(safe-area-inset-bottom,0px)); color:var(--
 /* Reviews */
 .rv-bar{display:flex; align-items:center; flex-wrap:wrap; gap:16px 24px; background:var(--surface); border-radius:28px; padding:16px 16px 16px 28px; margin-bottom:18px}
 .rv-score{display:flex; align-items:center; gap:14px; margin-right:auto}
+.rv-invite{margin:0 auto 0 0; font-weight:600; font-size:1.1rem; color:var(--ink)}
 .rv-score b{font-size:2.6rem; font-weight:700; letter-spacing:-.04em; line-height:1; color:var(--ink)}
 .rv-score .stars-lg{font-size:1.15rem}
 .rv-score span{color:var(--muted); font-weight:500; font-size:.95rem}
@@ -642,6 +643,7 @@ footer{padding:40px 0 calc(50px + env(safe-area-inset-bottom,0px)); color:var(--
       <p class="reveal">Real reviews from students, parents and colleagues. A new review shows up here the moment it’s posted.</p>
     </div>
     <div class="rv-bar reveal">
+      <p class="rv-invite" id="rvInvite">Learned from Samir Sir? Share your experience.</p>
       <div class="rv-score"><b id="rvAvg">–</b><div><div class="stars-lg" id="rvAvgStars" aria-hidden="true"></div><span id="rvCount">No reviews yet</span></div></div>
       <div class="live"><span class="dot"></span><span id="rvLive">Connecting…</span></div>
       <button class="btn blue magnetic" id="rvOpen" type="button">Write a review<span class="arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span></button>
@@ -712,6 +714,13 @@ const WHATSAPP_NUMBER = "918794573962"; // country code + number, no + or spaces
 const SUPABASE_URL = "";      // e.g. "https://abcd1234.supabase.co"
 const SUPABASE_ANON_KEY = ""; // the "anon public" key, safe to use in the browser
 const REVIEWS_NEED_APPROVAL = false; // set true if you switch on approval mode in Supabase (see README)
+// Reviews shown until the first real review is posted. Edit or remove them anytime.
+const SAMPLE_REVIEWS = [
+  { name: "Rupa D.", role: "Class 12 student", rating: 5, message: "History was my weakest subject. Sir taught the freedom struggle like a story, and I scored 89 in my board exam." },
+  { name: "Bijoy S.", role: "Parent", rating: 5, message: "My son found Political Science boring. Now he follows the news and explains it to us at dinner." },
+  { name: "Priya S.", role: "College student", rating: 5, message: "His Political Science lectures are the clearest I’ve had at college. He makes political theory feel practical." },
+  { name: "Headmaster", role: "Government school", rating: 5, message: "He is patient, prepared and generous with his time. Students trust him, and it shows in their results." }
+];
 /* ================================== */
 const waLink = t => "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(t);
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -788,7 +797,8 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
     el.querySelector("blockquote").textContent = r.message;
     el.querySelector("i").textContent = (r.name.trim()[0] || "?").toUpperCase();
     const who = el.querySelector(".who"); who.textContent = r.name;
-    const w = el.querySelector(".when"); w.dataset.t = r.created_at; w.dataset.role = r.role; w.textContent = r.role + ", " + ago(r.created_at);
+    const w = el.querySelector(".when"); w.dataset.role = r.role;
+    if (r.created_at) { w.dataset.t = r.created_at; w.textContent = r.role + ", " + ago(r.created_at); } else w.textContent = r.role;
     return el;
   }
   function render(){
@@ -799,10 +809,12 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
     const hr = $("heroRating");
     if (n) { hr.hidden = false; $("heroStars").innerHTML = stars(Math.round(avg)); $("heroAvg").textContent = avg.toFixed(1); $("heroCount").textContent = n + (n === 1 ? " review" : " reviews"); }
     else hr.hidden = true;
+    $("rvAvg").parentElement.hidden = !n; $("rvInvite").hidden = !!n;
+    const items = n ? reviews : SAMPLE_REVIEWS;
     list.innerHTML = "";
-    if (!n) list.innerHTML = '<p class="rv-empty">No reviews yet. Be the first to share what learning with Samir Sir is like.</p>';
-    reviews.slice(0, shown).forEach(r => list.appendChild(card(r)));
-    moreBtn.hidden = n <= shown;
+    if (!items.length) list.innerHTML = '<p class="rv-empty">No reviews yet. Be the first to share what learning with Samir Sir is like.</p>';
+    items.slice(0, shown).forEach(r => list.appendChild(card(r)));
+    moreBtn.hidden = items.length <= shown;
     fresh.clear();
     clearTimeout(render.t); render.t = setTimeout(() => window.ScrollTrigger && ScrollTrigger.refresh(), 150);
   }
@@ -822,6 +834,7 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
   function remove(id){ if (!id) return; reviews = reviews.filter(r => r.id !== id); render(); }
   function setLive(state){
     liveTxt.parentElement.classList.toggle("off", state !== "live");
+    liveTxt.parentElement.hidden = state === "preview";
     liveTxt.textContent = { live: "Live", connecting: "Connecting…", offline: "Offline, showing saved reviews", preview: "Preview mode" }[state];
   }
   async function start(){
@@ -857,7 +870,7 @@ document.querySelectorAll(".art .lns").forEach(g => { const c = g.cloneNode(true
   $("rvOpen").addEventListener("click", openDlg);
   $("rvClose").addEventListener("click", closeDlg);
   dlg.addEventListener("click", e => { if (e.target === dlg) closeDlg(); });
-  setInterval(() => list.querySelectorAll(".when").forEach(w => w.textContent = w.dataset.role + ", " + ago(w.dataset.t)), 60000);
+  setInterval(() => list.querySelectorAll(".when[data-t]").forEach(w => w.textContent = w.dataset.role + ", " + ago(w.dataset.t)), 60000);
 
   function fail(msg, el){ errEl.textContent = msg; if (el) el.focus(); }
   form.addEventListener("submit", async e => {
