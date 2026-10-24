@@ -317,10 +317,13 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
     }
     inApp = true; show("screenApp");
     $("accountEmail").textContent = "Logged in as " + ((session && session.user && session.user.email) || "admin") + ".";
-    try {
-      const html = await (await fetch("index.html", { cache: "no-store" })).text();
-      defaults = S.read(new DOMParser().parseFromString(html, "text/html"));
-    } catch (x) { defaults = {}; }
+    defaults = {};
+    for (const page of ["index.html", "about.html", "subjects.html", "notes.html", "reviews.html", "contact.html"]) {
+      try {
+        const html = await (await fetch(page, { cache: "no-store" })).text();
+        merge(defaults, S.read(new DOMParser().parseFromString(html, "text/html")));
+      } catch (x) {}
+    }
     const { data } = await sb.from("site_content").select("data").eq("id", "main").maybeSingle();
     saved = (data && data.data) || {};
     current = merge(clone(defaults), saved);

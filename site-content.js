@@ -149,6 +149,7 @@
         const s = doc.querySelector('[data-json="' + f.key + '"]');
         if (s) try { set(c, f.key, JSON.parse(s.textContent)); } catch (e) {}
       } else if (f.type === "items" && f.fixed) {
+        if (!doc.querySelector('[data-c^="' + f.key + '.0."]')) return;
         const arr = [];
         for (let i = 0; i < f.fixed; i++) {
           const o = {};
