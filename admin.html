@@ -8,7 +8,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#F4F4F4; --surface:#FFFFFF; --surface-2:#EDEDEF; --ink:#000; --text:#111114; --muted:#5F5F69; --line:#E3E3E7;
@@ -127,13 +127,117 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
   .savebar #saveState{font-size:.85rem}
   .savebar #discardBtn{padding:.6em .9em}
 }
+
+/* ---------- Motion ---------- */
+.script{font-family:"Great Vibes", "Snell Roundhand", cursive; font-style:normal; font-weight:400; color:var(--blue); font-size:1.22em; letter-spacing:0}
+.bg{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; transition:opacity .8s}
+.bg::before{content:""; position:absolute; inset:0; background-image:radial-gradient(#cfd0d6 1.2px, transparent 1.3px); background-size:26px 26px; -webkit-mask-image:radial-gradient(ellipse at center, #000 25%, transparent 72%); mask-image:radial-gradient(ellipse at center, #000 25%, transparent 72%)}
+.orb{position:absolute; border-radius:50%; filter:blur(70px)}
+.orb.a{width:440px; height:440px; background:#1E6BF2; opacity:.35; top:-140px; left:-100px; animation:drift1 16s ease-in-out infinite alternate}
+.orb.b{width:380px; height:380px; background:#8DB6FF; opacity:.45; bottom:-140px; right:-80px; animation:drift2 19s ease-in-out infinite alternate}
+.orb.c{width:240px; height:240px; background:#000; opacity:.07; top:45%; left:58%; animation:drift1 23s ease-in-out infinite alternate-reverse}
+@keyframes drift1{to{transform:translate(140px, 90px) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-120px, -70px) scale(.88)}}
+body.in-app .bg{opacity:0}
+.center{position:relative; z-index:1}
+.auth{position:relative; box-shadow:0 40px 90px -45px rgba(0,0,0,.4); animation:cardIn .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes cardIn{from{opacity:0; transform:translateY(46px) scale(.95)}}
+.stg > *{animation:up .7s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(.18s + var(--i, 0) * .07s)}
+@keyframes up{from{opacity:0; transform:translateY(18px)}}
+.auth.shake{animation:shake .5s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{10%,90%{transform:translateX(-2px)} 20%,80%{transform:translateX(4px)} 30%,50%,70%{transform:translateX(-9px)} 40%,60%{transform:translateX(9px)}}
+.auth .logo b{position:relative}
+.auth .logo b::after{content:""; position:absolute; inset:-5px; border-radius:50%; border:2px solid var(--blue); animation:ring 2.4s ease-out infinite}
+@keyframes ring{0%{opacity:.9; transform:scale(.8)} 100%{opacity:0; transform:scale(1.7)}}
+.auth h1{font-size:2.3rem}
+input, textarea, select{transition:border-color .2s, background .2s, box-shadow .25s}
+input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
+.pw-wrap{position:relative; display:block}
+.pw-wrap input{padding-right:52px}
+.pw-eye{position:absolute; right:7px; top:50%; transform:translateY(-50%); width:38px; height:38px; border:0; background:none; border-radius:10px; color:var(--muted); cursor:pointer; display:grid; place-items:center}
+.pw-eye svg{width:19px; height:19px}
+.pw-eye.on{color:var(--blue)}
+.btn{transition:transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .25s, background .25s, opacity .2s}
+.btn:not(:disabled):hover{transform:translateY(-2px); box-shadow:0 12px 24px -12px rgba(0,0,0,.45)}
+.btn:not(:disabled):active{transform:translateY(0) scale(.97)}
+.spin{width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,.35); border-top-color:#fff; animation:spin .7s linear infinite; flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Welcome wipe between login and dashboard */
+.wipe{position:fixed; inset:0; z-index:100; background:#000; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; text-align:center; padding:24px; transform:translateY(100%); transition:transform .75s cubic-bezier(.76,0,.24,1); pointer-events:none}
+.wipe.on{transform:none; pointer-events:auto}
+.wipe.off{transform:translateY(-100%)}
+.wipe .mk{width:58px; height:58px; border-radius:50%; background:#fff; color:#000; display:grid; place-items:center; font-weight:800; font-size:1.4rem}
+.wipe h2{color:#fff; font-size:clamp(2.4rem, 7vw, 4.8rem); letter-spacing:-.045em; line-height:1.15}
+.wipe h2 .script{color:#5C94FF}
+.wipe.on .mk, .wipe.on h2, .wipe.on p{animation:up .8s cubic-bezier(.2,.8,.2,1) both}
+.wipe.on h2{animation-delay:.12s} .wipe.on p{animation-delay:.22s}
+.wipe p{color:rgba(255,255,255,.55); font-weight:600; letter-spacing:.14em; text-transform:uppercase; font-size:.78rem}
+.wipe .wbar{position:absolute; left:0; right:0; bottom:0; height:3px; background:rgba(255,255,255,.1)}
+.wipe.on .wbar i{display:block; height:100%; background:#1E6BF2; transform-origin:0 50%; animation:grow 1.2s cubic-bezier(.4,0,.2,1) both}
+@keyframes grow{from{transform:scaleX(0)}}
+
+/* Dashboard entrance */
+.app-in .top{animation:downIn .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes downIn{from{transform:translateY(-110%)}}
+.app-in .side a{animation:leftIn .6s cubic-bezier(.2,.8,.2,1) both; animation-delay:calc(.25s + var(--i, 0) * .045s)}
+@keyframes leftIn{from{opacity:0; transform:translateX(-18px)}}
+.app-in .savebar{animation:barIn .9s cubic-bezier(.2,.8,.2,1) .5s both}
+@keyframes barIn{from{transform:translate(-50%, 160%)}}
+.rv-on{opacity:0; transform:translateY(34px) scale(.985); transition:opacity .75s cubic-bezier(.2,.8,.2,1), transform .75s cubic-bezier(.2,.8,.2,1)}
+.rv-on.seen{opacity:1; transform:none}
+
+/* Sidebar with a sliding highlight */
+.side{position:sticky}
+.side .ind{position:absolute; left:0; right:0; top:0; height:42px; border-radius:12px; background:var(--surface); box-shadow:0 6px 16px -10px rgba(0,0,0,.25); transition:transform .5s cubic-bezier(.2,.8,.2,1), height .5s, opacity .3s; z-index:0; opacity:0}
+.side a{position:relative; z-index:1; transition:color .3s}
+.side a.active{color:var(--ink)}
+.side a.active::before{content:""; position:absolute; left:6px; top:50%; width:4px; height:16px; margin-top:-8px; border-radius:4px; background:var(--blue)}
+.side a{padding-left:18px}
+
+/* Welcome card */
+.hello{position:relative; overflow:hidden}
+.hello::before{content:""; position:absolute; width:340px; height:340px; right:-120px; top:-160px; border-radius:50%; background:radial-gradient(circle, rgba(30,107,242,.28), transparent 65%); animation:drift2 14s ease-in-out infinite alternate}
+.hello > *{position:relative}
+.hello .date{color:var(--muted); font-weight:600; font-size:.92rem; margin-bottom:6px}
+.kpis{display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-top:22px}
+.kpi{background:var(--bg); border-radius:18px; padding:14px 16px; display:grid; gap:4px}
+.kpi span{color:var(--muted); font-size:.85rem; font-weight:600}
+.kpi b{font-size:1.7rem; font-weight:700; letter-spacing:-.04em; color:var(--ink); line-height:1.1; display:flex; align-items:center; gap:8px}
+.kpi b small{font-size:.95rem; color:var(--blue)}
+.pulse{width:10px; height:10px; border-radius:50%; background:#34A853; flex:none; animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,168,83,.55)} 70%{box-shadow:0 0 0 10px rgba(52,168,83,0)} 100%{box-shadow:0 0 0 0 rgba(52,168,83,0)}}
+@media (max-width: 700px){ .kpis{grid-template-columns:1fr 1fr} .kpi b{font-size:1.4rem} }
+
+/* Lists, reviews, photos, save */
+.item.adding, .rv.adding{animation:pop .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0; transform:translateY(-10px) scale(.97)}}
+.collapse{overflow:hidden; transition:height .35s cubic-bezier(.4,0,.2,1), opacity .3s, transform .35s, margin .35s, padding .35s; opacity:0 !important; transform:scale(.97)}
+.pv{position:relative}
+.pv.busy::after{content:""; position:absolute; inset:0; background:linear-gradient(100deg, transparent 20%, rgba(255,255,255,.7) 50%, transparent 80%); background-size:220% 100%; animation:shim 1.1s linear infinite}
+@keyframes shim{from{background-position:200% 0} to{background-position:-200% 0}}
+.pv img.drawn{animation:draw 1.5s cubic-bezier(.65,0,.35,1) both}
+@keyframes draw{from{clip-path:inset(0 0 100% 0)} to{clip-path:inset(0 0 0 0)}}
+.savebar{transition:box-shadow .3s}
+.savebar.dirty #saveBtn{animation:glow 1.8s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 7px rgba(30,107,242,.35)}}
+.savebar.saved #saveState::before{animation:pingok .7s ease-out}
+@keyframes pingok{0%{transform:scale(1)} 40%{transform:scale(2.2)} 100%{transform:scale(1)}}
+#saveBtn .ok{display:inline-grid; place-items:center; width:18px; height:18px; border-radius:50%; background:#fff; color:var(--blue); font-size:.75rem; animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+.toast{transition:transform .55s cubic-bezier(.34,1.56,.64,1)}
+.switch input::after{transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.rv{transition:background .3s, border-color .3s}
+.sec h2{display:flex; align-items:center; gap:12px}
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation:none !important; transition:none !important} .rv-on{opacity:1; transform:none} .wipe{display:none !important} }
 </style>
 </head>
 <body>
+<div class="bg" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
+<div class="wipe" id="wipe" aria-hidden="true"><span class="mk">S</span><h2 id="wipeTitle">Welcome <em class="script">back</em></h2><p>Opening your dashboard</p><div class="wbar"><i></i></div></div>
 
 <!-- Not connected -->
 <div class="center" id="screenSetup" hidden>
-  <div class="card auth">
+  <div class="card auth stg">
     <div class="logo"><b>S</b><span>Samir Edu World</span></div>
     <h1>Connect the database</h1>
     <p class="sub">The admin page needs Supabase. Put your Project URL and Publishable key in <strong>config.js</strong>, run <strong>supabase-setup.sql</strong>, then reload this page.</p>
@@ -143,12 +247,12 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
 
 <!-- Login -->
 <div class="center" id="screenLogin" hidden>
-  <form class="card auth" id="loginForm" novalidate>
+  <form class="card auth stg" id="loginForm" novalidate>
     <div class="logo"><b>S</b><span>Samir Edu World<small>Admin</small></span></div>
-    <h1>Log in</h1>
+    <h1>Welcome <em class="script">back</em></h1>
     <p class="sub">Edit your website. Changes go live the moment you save.</p>
     <label>Email<input type="email" name="email" autocomplete="username" inputmode="email"></label>
-    <label>Password<input type="password" name="password" autocomplete="current-password"></label>
+    <label>Password<span class="pw-wrap"><input type="password" name="password" autocomplete="current-password"><button class="pw-eye" type="button" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></span></label>
     <p class="err" id="loginErr" role="alert"></p>
     <button class="btn blue" type="submit" id="loginBtn">Log in</button>
     <button class="link" type="button" id="forgotBtn">Forgot password?</button>
@@ -158,7 +262,7 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
 
 <!-- Set a new password (after the reset email) -->
 <div class="center" id="screenReset" hidden>
-  <form class="card auth" id="resetForm" novalidate>
+  <form class="card auth stg" id="resetForm" novalidate>
     <div class="logo"><b>S</b><span>Samir Edu World<small>Admin</small></span></div>
     <h1>Choose a new password</h1>
     <label>New password<input type="password" name="p1" autocomplete="new-password" minlength="8"></label>
@@ -181,8 +285,15 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
     <nav class="side" id="sideNav" aria-label="Sections"></nav>
     <div class="main">
       <div class="card hello">
+        <p class="date" id="helloDate"></p>
         <h1 id="helloTitle">Welcome</h1>
         <p>Change anything below, then press <strong>Save changes</strong> at the bottom. Your website updates straight away, no code needed.</p>
+        <div class="kpis">
+          <div class="kpi"><span>Website</span><b><i class="pulse"></i>Live</b></div>
+          <div class="kpi"><span>Reviews shown</span><b id="kpiReviews">–</b></div>
+          <div class="kpi"><span>Average rating</span><b id="kpiAvg">–</b></div>
+          <div class="kpi"><span>Last saved</span><b id="kpiSaved" style="font-size:1.05rem">–</b></div>
+        </div>
       </div>
       <select class="jump" id="jump" aria-label="Go to section"></select>
       <div id="sections" class="main"><p class="loading">Loading your website…</p></div>
@@ -244,6 +355,38 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
 
   let defaults = {}, saved = {}, current = {}, dirty = false, inApp = false;
 
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  document.querySelectorAll(".stg").forEach(c => [...c.children].forEach((el, i) => el.style.setProperty("--i", i)));
+  document.querySelectorAll(".pw-eye").forEach(b => b.addEventListener("click", () => {
+    const inp = b.parentElement.querySelector("input"), on = inp.type === "password";
+    inp.type = on ? "text" : "password"; b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", on); b.setAttribute("aria-label", on ? "Hide password" : "Show password");
+  }));
+  function shake(el){ el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); }
+  function countUp(el, to, decimals, suffix){
+    suffix = suffix || "";
+    if (reduceMotion) { el.textContent = to.toFixed(decimals) + suffix; return; }
+    const t0 = performance.now();
+    (function tick(now){ const k = Math.min(1, (now - t0) / 1200), e = 1 - Math.pow(1 - k, 3); el.textContent = (to * e).toFixed(decimals) + suffix; if (k < 1) requestAnimationFrame(tick); })(t0);
+  }
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+  function ago(t){
+    const s = (new Date(t) - Date.now()) / 1000, a = Math.abs(s);
+    if (a < 45) return "just now";
+    const U = [["minute", 60], ["hour", 3600], ["day", 86400], ["week", 604800], ["month", 2629800], ["year", 31557600]];
+    let u = U[0]; for (const x of U) if (a >= x[1]) u = x;
+    return rtf.format(Math.round(s / u[1]), u[0]);
+  }
+  function collapse(el, done){
+    if (reduceMotion) { el.remove(); if (done) done(); return; }
+    el.style.height = el.offsetHeight + "px"; void el.offsetHeight;
+    el.classList.add("collapse");
+    el.style.height = "0px"; el.style.paddingTop = "0"; el.style.paddingBottom = "0"; el.style.marginTop = "0"; el.style.borderWidth = "0";
+    setTimeout(() => { el.remove(); if (done) done(); }, 360);
+  }
+  let lastSaved = null, rvData = [], io = null, spy = null;
+
   let toastT;
   function toast(msg, bad){ const t = $("toast"); t.textContent = msg; t.classList.toggle("bad", !!bad); t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 3600); }
 
@@ -252,7 +395,7 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
     if (!sb) { $("setupWhy").textContent = problem; return show("screenSetup"); }
     sb.auth.onAuthStateChange(ev => {
       if (ev === "PASSWORD_RECOVERY") show("screenReset");
-      if (ev === "SIGNED_OUT") { inApp = false; show("screenLogin"); }
+      if (ev === "SIGNED_OUT") { inApp = false; document.body.classList.remove("in-app", "app-in"); show("screenLogin"); }
     });
     if (isRecovery) return show("screenReset");
     const { data } = await sb.auth.getSession();
@@ -263,11 +406,11 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
     e.preventDefault();
     const f = e.target, err = $("loginErr"); err.textContent = ""; $("loginMsg").textContent = "";
     const email = f.email.value.trim(), password = f.password.value;
-    if (!email || !password) { err.textContent = "Enter your email and password."; return; }
-    const b = $("loginBtn"); b.disabled = true; b.textContent = "Logging in…";
+    if (!email || !password) { err.textContent = "Enter your email and password."; shake(f); return; }
+    const b = $("loginBtn"); b.disabled = true; b.innerHTML = '<span class="spin"></span>Logging in…';
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
     b.disabled = false; b.textContent = "Log in";
-    if (error) { err.textContent = loginError(error); return; }
+    if (error) { err.textContent = loginError(error); shake(f); return; }
     f.password.value = "";
     enterApp(data.session);
   });
@@ -305,17 +448,20 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
 
   $("logoutBtn").addEventListener("click", async () => {
     if (dirty && !confirm("You have unsaved changes. Log out anyway?")) return;
-    dirty = false; await sb.auth.signOut(); show("screenLogin");
+    dirty = false; await sb.auth.signOut(); document.body.classList.remove("in-app", "app-in"); show("screenLogin");
   });
 
   async function enterApp(session){
     if (inApp) return;
+    const wipe = $("wipe"), t0 = performance.now();
+    if (!reduceMotion) { wipe.style.transition = "none"; wipe.classList.remove("on", "off"); void wipe.offsetWidth; wipe.style.transition = ""; wipe.classList.add("on"); }
     const { data: ok, error } = await sb.rpc("is_admin");
     if (error || !ok) {
+      wipe.classList.remove("on");
       await sb.auth.signOut(); show("screenLogin");
-      $("loginErr").textContent = "This account isn’t allowed to edit the website."; return;
+      $("loginErr").textContent = "This account isn’t allowed to edit the website."; shake($("loginForm")); return;
     }
-    inApp = true; show("screenApp");
+    inApp = true;
     $("accountEmail").textContent = "Logged in as " + ((session && session.user && session.user.email) || "admin") + ".";
     defaults = {};
     for (const page of ["index.html", "about.html", "subjects.html", "notes.html", "reviews.html", "contact.html"]) {
@@ -324,10 +470,51 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
         merge(defaults, S.read(new DOMParser().parseFromString(html, "text/html")));
       } catch (x) {}
     }
-    const { data } = await sb.from("site_content").select("data").eq("id", "main").maybeSingle();
+    const { data } = await sb.from("site_content").select("data, updated_at").eq("id", "main").maybeSingle();
     saved = (data && data.data) || {};
+    lastSaved = data && data.updated_at;
     current = merge(clone(defaults), saved);
-    build(); setDirty(false); loadReviews();
+    const first = (S.get(current, "profile.name") || "").split(" ")[0];
+    if (first) $("wipeTitle").innerHTML = 'Hello, <em class="script">' + esc(first) + "</em>";
+    build(); setDirty(false);
+    if (!reduceMotion) await wait(Math.max(0, 1500 - (performance.now() - t0)));
+    show("screenApp");
+    document.body.classList.add("in-app", "app-in");
+    setupMotion();
+    if (!reduceMotion) { wipe.classList.add("off"); setTimeout(() => { wipe.style.transition = "none"; wipe.classList.remove("on", "off"); void wipe.offsetWidth; wipe.style.transition = ""; }, 900); }
+    loadReviews();
+  }
+
+  function greet(){
+    const h = new Date().getHours(), part = h < 12 ? "morning" : h < 17 ? "afternoon" : "evening";
+    const first = (S.get(current, "profile.name") || "").split(" ")[0] || "there";
+    $("helloTitle").innerHTML = "Good " + part + ', <em class="script">' + esc(first) + "</em>";
+    $("helloDate").textContent = new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" });
+    $("kpiSaved").textContent = lastSaved ? ago(lastSaved) : "Not yet";
+  }
+  function setupMotion(){
+    [...$("sideNav").querySelectorAll("a")].forEach((a, i) => a.style.setProperty("--i", i));
+    setupSpy();
+    if (reduceMotion || !("IntersectionObserver" in window)) return;
+    if (io) io.disconnect();
+    io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("seen"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -6% 0px" });
+    document.querySelectorAll("#screenApp .card").forEach((c, i) => { c.classList.add("rv-on"); c.style.transitionDelay = (i < 3 ? 0.35 + i * 0.1 : 0) + "s"; io.observe(c); });
+  }
+  function setupSpy(){
+    const nav = $("sideNav");
+    let ind = nav.querySelector(".ind");
+    if (!ind) { ind = document.createElement("span"); ind.className = "ind"; nav.prepend(ind); }
+    const links = [...nav.querySelectorAll("a")];
+    const move = a => {
+      links.forEach(l => l.classList.toggle("active", l === a));
+      if (!a || !a.offsetHeight) return;
+      ind.style.opacity = 1; ind.style.height = a.offsetHeight + "px"; ind.style.transform = "translateY(" + a.offsetTop + "px)";
+    };
+    if (spy) spy.disconnect();
+    if (!("IntersectionObserver" in window)) return;
+    spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) move(links.find(l => l.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-30% 0px -65% 0px" });
+    links.forEach(l => { const t = document.querySelector(l.getAttribute("href")); if (t) spy.observe(t); });
+    setTimeout(() => move(links[0]), 50);
   }
 
   /* ---------- Form building ---------- */
@@ -377,8 +564,7 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
       nav.insertAdjacentHTML("beforeend", '<a href="#sec-' + id + '">' + esc(t) + "</a>");
       jump.insertAdjacentHTML("beforeend", '<option value="sec-' + id + '">' + esc(t) + "</option>");
     });
-    const name = S.get(current, "profile.name") || "";
-    $("helloTitle").textContent = "Welcome, " + (name.split(" ")[0] || "back");
+    greet();
     box.querySelectorAll("input[type=file]").forEach(inp => inp.addEventListener("change", onPhoto));
   }
   $("jump").addEventListener("change", e => { const el = $(e.target.value); if (el) el.scrollIntoView({ behavior: "smooth" }); e.target.value = ""; });
@@ -391,13 +577,14 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
     if (add) {
       const key = add.dataset.add, f = findField(key), list = sections.querySelector('[data-items="' + key + '"]');
       list.insertAdjacentHTML("beforeend", item(f, {}, list.children.length));
-      list.lastElementChild.querySelector("input, textarea").focus();
+      list.lastElementChild.classList.add("adding");
+      list.lastElementChild.querySelector("input, textarea").focus({ preventScroll: true });
+      list.lastElementChild.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
       setDirty(true);
     }
     if (rem) {
       const it = rem.closest(".item"), list = it.parentElement, f = findField(list.dataset.items);
-      it.remove();
-      [...list.children].forEach((c, i) => c.querySelector(".item-head span").textContent = f.label + " " + (i + 1));
+      collapse(it, () => [...list.children].forEach((c, i) => c.querySelector(".item-head span").textContent = f.label + " " + (i + 1)));
       setDirty(true);
     }
   });
@@ -441,18 +628,23 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
   }
   $("discardBtn").addEventListener("click", () => {
     if (!confirm("Undo all changes since your last save?")) return;
-    current = merge(clone(defaults), saved); build(); setDirty(false);
+    current = merge(clone(defaults), saved); build(); setDirty(false); setupSpy();
+    toast("Changes undone.");
   });
   $("saveBtn").addEventListener("click", async () => {
     const c = collect();
     if (!validate(c)) return;
-    const b = $("saveBtn"); b.disabled = true; b.textContent = "Saving…";
+    const b = $("saveBtn"); b.disabled = true; b.innerHTML = '<span class="spin"></span>Saving…';
     const { error } = await sb.from("site_content").upsert({ id: "main", data: c, updated_at: new Date().toISOString() });
-    b.textContent = "Save changes";
-    if (error) { b.disabled = false; toast("Couldn’t save. Check your internet and try again.", true); return; }
+    if (error) { b.disabled = false; b.textContent = "Save changes"; toast("Couldn’t save. Check your internet and try again.", true); return; }
     saved = c; current = merge(clone(defaults), saved);
     try { localStorage.setItem("sew-content", JSON.stringify(c)); } catch (x) {}
-    setDirty(false); toast("Saved. Your website is updated.");
+    setDirty(false);
+    b.innerHTML = '<span class="ok">✓</span>Saved';
+    const bar = $("saveBar"); bar.classList.add("saved"); setTimeout(() => bar.classList.remove("saved"), 800);
+    setTimeout(() => { if (!dirty) b.textContent = "Save changes"; }, 1800);
+    lastSaved = new Date().toISOString(); $("kpiSaved").textContent = "just now";
+    toast("Saved. Your website is updated.");
   });
   addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
 
@@ -462,9 +654,11 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
     const wrap = e.target.closest("[data-img-field]"), key = wrap.dataset.imgField, f = findField(key);
     const status = wrap.querySelector(".status"), pencil = wrap.querySelector(".check input").checked;
     status.textContent = pencil ? "Making the pencil drawing…" : "Preparing the photo…";
+    const pv = wrap.querySelector(".pv"); pv.classList.add("busy");
     try {
       const blob = await processPhoto(file, pencil, f.aspect);
-      wrap.querySelector(".pv img").src = URL.createObjectURL(blob);
+      const im = wrap.querySelector(".pv img"); im.src = URL.createObjectURL(blob);
+      pv.classList.remove("busy"); im.classList.remove("drawn"); void im.offsetWidth; im.classList.add("drawn");
       status.textContent = "Uploading…";
       const path = "photos/" + key.replace(/\W+/g, "-") + "-" + Date.now() + ".jpg";
       const { error } = await sb.storage.from("site-images").upload(path, blob, { contentType: "image/jpeg", cacheControl: "31536000" });
@@ -473,6 +667,7 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
       status.textContent = "Uploaded. Press Save changes to put it on the website.";
       setDirty(true);
     } catch (x) {
+      pv.classList.remove("busy");
       status.textContent = "That photo couldn’t be uploaded. Try another photo or check your internet.";
     }
     e.target.value = "";
@@ -551,13 +746,15 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
     box.innerHTML = '<p class="loading">Loading reviews…</p>';
     const { data, error } = await sb.from("reviews").select("*").order("created_at", { ascending: false }).limit(500);
     if (error) { box.innerHTML = '<p class="empty">Couldn’t load reviews. Tap Refresh reviews to try again.</p>'; return; }
+    rvData = data; updateKpis(true);
     const hidden = data.filter(r => !r.approved).length;
     $("rvCounts").textContent = data.length ? data.length + (data.length === 1 ? " review" : " reviews") + (hidden ? ", " + hidden + " hidden from the website" : "") : "";
     if (!data.length) { box.innerHTML = '<p class="empty">No reviews yet. When someone posts a review on your website, it shows up here.</p>'; return; }
     box.innerHTML = "";
-    data.forEach(r => {
+    data.forEach((r, idx) => {
       const el = document.createElement("article");
-      el.className = "rv" + (r.approved ? "" : " off");
+      el.className = "rv adding" + (r.approved ? "" : " off");
+      el.style.animationDelay = Math.min(idx, 8) * 0.05 + "s";
       el.innerHTML = '<div class="rv-top"><span class="stars"></span><b></b><span class="meta"></span></div><p></p><div class="rv-actions"><label class="switch"><input type="checkbox"> <span>Shown on website</span></label><button class="btn danger sm" type="button">Delete</button></div>';
       el.querySelector(".stars").innerHTML = "★".repeat(r.rating) + '<span class="o">' + "★".repeat(5 - r.rating) + "</span>";
       el.querySelector("b").textContent = r.name;
@@ -567,17 +764,28 @@ textarea{min-height:96px; resize:vertical; line-height:1.5}
       sw.addEventListener("change", async () => {
         const { error } = await sb.from("reviews").update({ approved: sw.checked }).eq("id", r.id);
         if (error) { sw.checked = !sw.checked; toast("Couldn’t change that review. Try again.", true); return; }
-        el.classList.toggle("off", !sw.checked);
+        el.classList.toggle("off", !sw.checked); r.approved = sw.checked; updateKpis();
         toast(sw.checked ? "Review is showing on the website." : "Review hidden from the website.");
       });
       el.querySelector(".danger").addEventListener("click", async () => {
         if (!confirm("Delete the review from " + r.name + "? This can’t be undone.")) return;
         const { error } = await sb.from("reviews").delete().eq("id", r.id);
         if (error) { toast("Couldn’t delete that review. Try again.", true); return; }
-        el.remove(); toast("Review deleted.");
+        rvData = rvData.filter(x => x.id !== r.id); updateKpis();
+        collapse(el); toast("Review deleted.");
       });
       box.appendChild(el);
     });
+  }
+
+  function updateKpis(animate){
+    const shown = rvData.filter(r => r.approved), n = shown.length;
+    const avg = n ? shown.reduce((s, r) => s + r.rating, 0) / n : 0;
+    const kr = $("kpiReviews"), ka = $("kpiAvg");
+    if (animate) { countUp(kr, n, 0); if (n) countUp(ka, avg, 1, " ★"); else ka.textContent = "–"; }
+    else { kr.textContent = n; ka.textContent = n ? avg.toFixed(1) + " ★" : "–"; }
+    const hid = rvData.length - n;
+    $("rvCounts").textContent = rvData.length ? rvData.length + (rvData.length === 1 ? " review" : " reviews") + (hid ? ", " + hid + " hidden from the website" : "") : "";
   }
 
   /* ---------- Account ---------- */
