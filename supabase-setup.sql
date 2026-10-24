@@ -69,6 +69,14 @@ language sql stable security definer set search_path = public as $$
   select exists (select 1 from public.admins where lower(email) = lower(auth.jwt() ->> 'email'));
 $$;
 
+-- Lets the login page say "Unauthorized email" before trying to log in or send a reset link.
+-- It only answers yes/no for the exact email typed, and lists nothing.
+create or replace function public.is_admin_email(check_email text) returns boolean
+language sql stable security definer set search_path = public as $$
+  select exists (select 1 from public.admins where lower(email) = lower(trim(check_email)));
+$$;
+grant execute on function public.is_admin_email(text) to anon, authenticated;
+
 -- 6. Website content (one row, edited from admin.html)
 create table if not exists public.site_content (
   id          text primary key default 'main',

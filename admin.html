@@ -38,6 +38,9 @@ button{font:inherit}
 .logo b{width:36px; height:36px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center}
 .logo small{display:block; font-weight:500; color:var(--muted); font-size:.8rem; letter-spacing:0}
 .err{color:var(--red); font-weight:600; font-size:.92rem; min-height:1.2em}
+.auth input.bad{border-color:var(--red); background:#FDECEA}
+.err.unauth{display:flex; align-items:flex-start; gap:10px; background:#FDECEA; border-radius:14px; padding:12px 14px; animation:pop .4s cubic-bezier(.2,.8,.2,1)}
+.err.unauth::before{content:"!"; flex:none; width:22px; height:22px; border-radius:50%; background:var(--red); color:#fff; display:grid; place-items:center; font-weight:800; font-size:.8rem}
 .msg{color:var(--green); font-weight:600; font-size:.92rem}
 
 /* Auth screens */
@@ -402,15 +405,37 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
     if (data && data.session) enterApp(data.session); else show("screenLogin");
   }
 
+  /* Only emails in the admins table may log in or reset a password */
+  const UNAUTH = "Unauthorized email. Only the website owner’s email can use the admin panel.";
+  async function checkEmail(email){
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return "bad";
+    const { data, error } = await sb.rpc("is_admin_email", { check_email: email });
+    if (error) return "unknown";
+    return data ? "ok" : "no";
+  }
+  function showErr(msg, unauth){
+    const err = $("loginErr"); err.textContent = msg; err.classList.toggle("unauth", !!unauth);
+    $("loginForm").email.classList.toggle("bad", !!unauth);
+  }
+  $("loginForm").email.addEventListener("input", () => { $("loginForm").email.classList.remove("bad"); $("loginErr").classList.remove("unauth"); });
+
   $("loginForm").addEventListener("submit", async e => {
     e.preventDefault();
-    const f = e.target, err = $("loginErr"); err.textContent = ""; $("loginMsg").textContent = "";
+    const f = e.target; showErr(""); $("loginMsg").textContent = "";
     const email = f.email.value.trim(), password = f.password.value;
-    if (!email || !password) { err.textContent = "Enter your email and password."; shake(f); return; }
+    if (!email || !password) { showErr("Enter your email and password."); shake(f); return; }
     const b = $("loginBtn"); b.disabled = true; b.innerHTML = '<span class="spin"></span>Logging in…';
+    const who = await checkEmail(email);
+    if (who === "bad" || who === "no") {
+      b.disabled = false; b.textContent = "Log in";
+      showErr(who === "bad" ? "That doesn’t look like an email address." : UNAUTH, true); shake(f); f.email.focus(); return;
+    }
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
     b.disabled = false; b.textContent = "Log in";
-    if (error) { err.textContent = loginError(error); shake(f); return; }
+    if (error) {
+      const wrongPw = who === "ok" && /invalid login|invalid credentials/i.test(error.message || "");
+      showErr(wrongPw ? "Wrong password. Try again, or tap Forgot password." : loginError(error)); shake(f); return;
+    }
     f.password.value = "";
     enterApp(data.session);
   });
@@ -426,10 +451,19 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
   }
 
   $("forgotBtn").addEventListener("click", async () => {
-    const email = $("loginForm").email.value.trim(), err = $("loginErr"); err.textContent = "";
-    if (!email) { err.textContent = "Type your email above first, then tap Forgot password."; return; }
+    const f = $("loginForm"), email = f.email.value.trim(), fb = $("forgotBtn");
+    showErr(""); $("loginMsg").textContent = "";
+    if (!email) { showErr("Type your email above first, then tap Forgot password."); f.email.focus(); return; }
+    fb.disabled = true; fb.textContent = "Checking…";
+    const who = await checkEmail(email);
+    if (who === "bad" || who === "no") {
+      fb.disabled = false; fb.textContent = "Forgot password?";
+      showErr(who === "bad" ? "That doesn’t look like an email address." : UNAUTH, true); shake(f); f.email.focus(); return;
+    }
+    fb.textContent = "Sending…";
     const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
-    if (error) { err.textContent = "Couldn’t send the email. Try again in a minute."; return; }
+    fb.disabled = false; fb.textContent = "Forgot password?";
+    if (error) { showErr(/rate|seconds|too many/i.test(error.message || "") ? "A reset email was sent recently. Wait a minute, then try again." : "Couldn’t send the email. Try again in a minute."); return; }
     $("loginMsg").textContent = "Check your email for a link to choose a new password.";
   });
 
@@ -459,7 +493,7 @@ input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--blue-soft)}
     if (error || !ok) {
       wipe.classList.remove("on");
       await sb.auth.signOut(); show("screenLogin");
-      $("loginErr").textContent = "This account isn’t allowed to edit the website."; shake($("loginForm")); return;
+      showErr(UNAUTH, true); shake($("loginForm")); return;
     }
     inApp = true;
     $("accountEmail").textContent = "Logged in as " + ((session && session.user && session.user.email) || "admin") + ".";
